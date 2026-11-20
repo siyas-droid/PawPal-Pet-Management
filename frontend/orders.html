@@ -1,0 +1,393 @@
+```html
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Orders | PawPal</title>
+
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background: #f5f7f2;
+            color: #34483a;
+        }
+
+        .sidebar {
+            width: 245px;
+            height: 100vh;
+            position: fixed;
+            top: 0;
+            left: 0;
+            background: #315e48;
+            color: white;
+            padding: 28px 18px;
+            display: flex;
+            flex-direction: column;
+            z-index: 100;
+        }
+
+        .logo {
+            font-size: 27px;
+            font-weight: bold;
+            text-decoration: none;
+            color: white;
+            margin-bottom: 38px;
+            padding-left: 10px;
+        }
+
+        .sidebar-nav {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .sidebar-nav a {
+            color: #e6eee7;
+            text-decoration: none;
+            padding: 14px 15px;
+            border-radius: 9px;
+            font-size: 15px;
+        }
+
+        .sidebar-nav a:hover,
+        .sidebar-nav a.active {
+            background: #527b60;
+            color: white;
+        }
+
+        .sidebar-bottom {
+            margin-top: auto;
+        }
+
+        .sidebar-bottom button {
+            width: 100%;
+            border: none;
+            background: #527b60;
+            color: white;
+            padding: 13px;
+            border-radius: 9px;
+            cursor: pointer;
+            font-size: 15px;
+        }
+
+        .main-content {
+            margin-left: 245px;
+            padding: 30px 38px;
+        }
+
+        .topbar {
+            margin-bottom: 28px;
+        }
+
+        .topbar h2 {
+            margin: 0;
+            color: #315e48;
+            font-size: 23px;
+        }
+
+        .orders-hero {
+            background: linear-gradient(120deg, #315e48, #64866a);
+            color: white;
+            padding: 42px;
+            border-radius: 16px;
+            margin-bottom: 32px;
+        }
+
+        .supplies-tag {
+            display: inline-block;
+            font-size: 12px;
+            letter-spacing: 1.5px;
+            background: rgba(255, 255, 255, 0.15);
+            padding: 7px 12px;
+            border-radius: 20px;
+        }
+
+        .orders-hero h1 {
+            margin: 18px 0 10px;
+            font-size: 30px;
+        }
+
+        .orders-hero p {
+            line-height: 1.7;
+            margin: 0;
+            color: #edf3ed;
+        }
+
+        .orders-section {
+            background: white;
+            padding: 25px;
+            border-radius: 14px;
+            border: 1px solid #e5ebe3;
+        }
+
+        .orders-heading {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 22px;
+        }
+
+        .orders-heading h2 {
+            color: #315e48;
+            margin: 0 0 7px;
+        }
+
+        .orders-heading p {
+            color: #7a887c;
+            margin: 0;
+            font-size: 14px;
+        }
+
+        .shop-more-btn {
+            background: #315e48;
+            color: white;
+            padding: 12px 17px;
+            border-radius: 8px;
+            text-decoration: none;
+            white-space: nowrap;
+        }
+
+        .shop-more-btn:hover {
+            background: #527b60;
+        }
+
+        .order-filters {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 9px;
+            margin-bottom: 25px;
+        }
+
+        .order-filter {
+            border: 1px solid #dce5dc;
+            background: #f5f7f2;
+            color: #527b60;
+            padding: 10px 15px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 13px;
+        }
+
+        .order-filter:hover,
+        .order-filter.active {
+            background: #315e48;
+            color: white;
+            border-color: #315e48;
+        }
+
+        .orders-container {
+            display: grid;
+            gap: 18px;
+        }
+
+        .orders-loading {
+            color: #7a887c;
+            text-align: center;
+            padding: 25px;
+        }
+
+        @media (max-width: 850px) {
+            .sidebar {
+                width: 205px;
+            }
+
+            .main-content {
+                margin-left: 205px;
+                padding: 25px;
+            }
+        }
+
+        @media (max-width: 600px) {
+            .sidebar {
+                position: relative;
+                width: 100%;
+                height: auto;
+                padding: 17px;
+            }
+
+            .logo {
+                margin-bottom: 15px;
+                padding-left: 5px;
+            }
+
+            .sidebar-nav {
+                flex-direction: row;
+                flex-wrap: wrap;
+                gap: 5px;
+            }
+
+            .sidebar-nav a {
+                padding: 9px 11px;
+                font-size: 13px;
+            }
+
+            .sidebar-bottom {
+                margin-top: 12px;
+            }
+
+            .sidebar-bottom button {
+                padding: 9px;
+            }
+
+            .main-content {
+                margin-left: 0;
+                padding: 18px;
+            }
+
+            .orders-hero {
+                padding: 25px;
+            }
+
+            .orders-hero h1 {
+                font-size: 25px;
+            }
+
+            .orders-heading {
+                align-items: flex-start;
+                flex-direction: column;
+            }
+
+            .orders-section {
+                padding: 17px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- Sidebar -->
+    <aside class="sidebar">
+
+        <a href="dashboard.html" class="logo">🐾 PawPal</a>
+
+        <nav class="sidebar-nav">
+
+            <a href="dashboard.html">⌂ Dashboard</a>
+
+            <a href="pets.html">🐾 My Pets</a>
+
+            <a href="appointments.html">✂ Grooming</a>
+
+            <a href="daycare.html">🏡 Daycare</a>
+
+            <a href="supplies.html">🛍 Pet Supplies</a>
+
+            <a href="orders.html" class="active">📦 My Orders</a>
+
+        </nav>
+
+        <div class="sidebar-bottom">
+            <button onclick="logout()">↪ Logout</button>
+        </div>
+
+    </aside>
+
+
+    <!-- Main Content -->
+    <main class="main-content">
+
+        <div class="topbar">
+            <h2>My Orders</h2>
+        </div>
+
+        <!-- Hero -->
+        <section class="orders-hero">
+
+            <span class="supplies-tag">PAWPAL ORDER HISTORY</span>
+
+            <h1>My Orders 📦</h1>
+
+            <p>
+                All your pet shopping orders in one place.
+                Track your purchases and check their delivery status.
+            </p>
+
+        </section>
+
+
+        <!-- Orders -->
+        <section class="orders-section">
+
+            <div class="orders-heading">
+
+                <div>
+                    <h2>Your Orders</h2>
+                    <p>View your current and previous purchases.</p>
+                </div>
+
+                <a href="supplies.html" class="shop-more-btn">
+                    🛍️ Shop More
+                </a>
+
+            </div>
+
+
+            <div class="order-filters">
+
+                <button class="order-filter active" data-status="all">
+                    All Orders
+                </button>
+
+                <button class="order-filter" data-status="Pending">
+                    Pending
+                </button>
+
+                <button class="order-filter" data-status="Confirmed">
+                    Confirmed
+                </button>
+
+                <button class="order-filter" data-status="Shipped">
+                    Shipped
+                </button>
+
+                <button class="order-filter" data-status="Delivered">
+                    Delivered
+                </button>
+
+                <button class="order-filter" data-status="Cancelled">
+                    Cancelled
+                </button>
+
+            </div>
+
+
+            <div id="ordersContainer" class="orders-container">
+
+                <p class="orders-loading">
+                    Loading your orders...
+                </p>
+
+            </div>
+
+        </section>
+
+    </main>
+
+
+    <script>
+        const user = JSON.parse(sessionStorage.getItem("pawpalUser"));
+
+        if (!user) {
+            window.location.href = "login.html";
+        }
+
+        function logout() {
+            sessionStorage.removeItem("pawpalUser");
+            window.location.href = "login.html";
+        }
+    </script>
+
+    <script src="../js/orders.js"></script>
+
+</body>
+</html>
+```

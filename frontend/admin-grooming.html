@@ -1,0 +1,342 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Grooming Management | PawPal</title>
+<style>
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body {
+    font-family: Arial, sans-serif;
+    background: #f7f6ff;
+    color: #302d50;
+}
+.sidebar {
+    width: 250px;
+    background: #302d50;
+    color: white;
+    padding: 28px 18px;
+    position: fixed;
+    height: 100vh;
+}
+.logo { font-size: 25px; font-weight: bold; padding: 0 12px 35px; }
+.logo span { color: #aaa3ff; }
+.nav-title {
+    color: #aaa6c4;
+    font-size: 11px;
+    letter-spacing: 1.5px;
+    margin: 20px 12px 12px;
+}
+.nav-link {
+    display: block;
+    color: #e5e3f5;
+    text-decoration: none;
+    padding: 14px 13px;
+    border-radius: 10px;
+    margin: 5px 0;
+    font-size: 14px;
+}
+.nav-link:hover, .nav-link.active { background: #6c63ff; color: white; }
+.sidebar-bottom { position: absolute; bottom: 25px; left: 18px; right: 18px; }
+.sidebar-bottom button {
+    width: 100%; background: #494467; color: white;
+    border: 0; padding: 13px; border-radius: 9px; cursor: pointer;
+}
+.main { margin-left: 250px; padding: 30px 35px; }
+.topbar {
+    display: flex; justify-content: space-between;
+    align-items: center; gap: 15px; margin-bottom: 30px;
+}
+.topbar h1 { font-size: 25px; }
+.admin-info { background: white; padding: 11px 17px; border-radius: 12px; font-size: 14px; }
+.welcome {
+    background: linear-gradient(120deg, #6c63ff, #a69eff);
+    padding: 30px; border-radius: 18px; color: white; margin-bottom: 25px;
+}
+.welcome h2 { margin-bottom: 9px; }
+.welcome p { color: #f0efff; }
+.stats {
+    display: grid; grid-template-columns: repeat(3, 1fr);
+    gap: 16px; margin-bottom: 28px;
+}
+.stat-card {
+    background: white; padding: 20px; border-radius: 14px;
+    border: 1px solid #eeecff;
+}
+.stat-card h3 { font-size: 13px; color: #77738f; margin-bottom: 12px; }
+.stat-card p { font-size: 27px; font-weight: bold; color: #6c63ff; }
+.toolbar {
+    display: flex; justify-content: space-between;
+    align-items: center; gap: 12px; flex-wrap: wrap; margin-bottom: 18px;
+}
+.toolbar h2 { font-size: 20px; }
+.search {
+    width: 300px; max-width: 100%; padding: 12px 14px;
+    border: 1px solid #e5e2f5; border-radius: 9px; outline: none;
+}
+.search:focus { border-color: #6c63ff; }
+.table-wrap {
+    background: white; border: 1px solid #eeecff;
+    border-radius: 15px; overflow-x: auto;
+}
+table { width: 100%; min-width: 1050px; border-collapse: collapse; }
+th, td {
+    text-align: left; padding: 15px;
+    border-bottom: 1px solid #f0eff7;
+    font-size: 13px; vertical-align: top;
+}
+th { background: #f1efff; color: #514c78; font-size: 12px; }
+td { color: #55516e; line-height: 1.6; }
+tr:last-child td { border-bottom: none; }
+.name { font-weight: bold; color: #302d50; }
+.status-select {
+    padding: 9px; border: 1px solid #dedaf5;
+    border-radius: 8px; background: white; color: #302d50;
+}
+.save-btn {
+    margin-top: 7px; padding: 9px 13px;
+    background: #6c63ff; color: white; border: none;
+    border-radius: 8px; cursor: pointer;
+}
+.save-btn:hover { background: #5148e5; }
+.save-btn:disabled { opacity: .6; cursor: not-allowed; }
+.message { font-size: 12px; margin-top: 5px; }
+.loading, .empty, .error {
+    padding: 30px; text-align: center;
+    color: #77738f; background: white;
+}
+.error { color: #c0394b; }
+@media(max-width: 650px) {
+    .sidebar { width: 68px; padding: 20px 8px; }
+    .logo { font-size: 0; padding: 0 5px 30px; }
+    .logo:first-letter { font-size: 25px; }
+    .nav-title, .nav-link span, .sidebar-bottom button span { display: none; }
+    .nav-link { text-align: center; font-size: 20px; padding: 13px 5px; }
+    .sidebar-bottom { left: 8px; right: 8px; }
+    .main { margin-left: 68px; padding: 22px 14px; }
+    .topbar { align-items: flex-start; flex-direction: column; }
+    .stats { grid-template-columns: 1fr; }
+}
+</style>
+</head>
+<body>
+
+<aside class="sidebar">
+    <div class="logo">🐾 Paw<span>Pal</span></div>
+    <p class="nav-title">MAIN MENU</p>
+    <a href="admin-dashboard.html" class="nav-link">🏠 <span>Dashboard</span></a>
+    <p class="nav-title">MANAGEMENT</p>
+    <a href="customers.html" class="nav-link">👥 <span>Customers</span></a>
+    <a href="admin-daycare.html" class="nav-link">🏡 <span>Daycare</span></a>
+    <a href="admin-grooming.html" class="nav-link active">✂️ <span>Grooming</span></a>
+    <a href="admin-dashboard.html" class="nav-link">🛍️ <span>Orders</span></a>
+    <a href="admin-dashboard.html" class="nav-link">🐶 <span>Pets</span></a>
+    <div class="sidebar-bottom">
+        <button onclick="logout()">🚪 <span>Logout</span></button>
+    </div>
+</aside>
+
+<main class="main">
+    <div class="topbar">
+        <h1>Grooming Management</h1>
+        <div class="admin-info">👤 <span id="adminName">Admin</span></div>
+    </div>
+
+    <section class="welcome">
+        <h2>Grooming Appointments ✂️</h2>
+        <p>View customer appointments, pet details and manage appointment status.</p>
+    </section>
+
+    <section class="stats">
+        <div class="stat-card">
+            <h3>Total Appointments</h3>
+            <p id="totalAppointments">--</p>
+        </div>
+        <div class="stat-card">
+            <h3>Pending Appointments</h3>
+            <p id="pendingAppointments">--</p>
+        </div>
+        <div class="stat-card">
+            <h3>Confirmed Appointments</h3>
+            <p id="confirmedAppointments">--</p>
+        </div>
+    </section>
+
+    <div class="toolbar">
+        <h2>All Appointments</h2>
+        <input type="search" class="search" id="searchInput"
+               placeholder="Search customer, pet or service..."
+               oninput="filterAppointments()">
+    </div>
+
+    <div class="table-wrap" id="appointmentTable">
+        <div class="loading">Loading grooming appointments...</div>
+    </div>
+</main>
+
+<script>
+const admin = JSON.parse(sessionStorage.getItem('pawpalAdmin') || 'null');
+
+if (!admin || !admin.admin_id) {
+    window.location.href = 'admin-login.html';
+} else {
+    document.getElementById('adminName').textContent = admin.username;
+}
+
+function logout() {
+    sessionStorage.removeItem('pawpalAdmin');
+    window.location.href = 'admin-login.html';
+}
+
+function safe(value) {
+    return String(value ?? '-').replace(/[&<>"']/g, char => ({
+        '&': '&amp;', '<': '&lt;', '>': '&gt;',
+        '"': '&quot;', "'": '&#39;'
+    })[char]);
+}
+
+function formatDate(value) {
+    if (!value) return '-';
+    return String(value).slice(0, 10).split('-').reverse().join('/');
+}
+
+function formatTime(value) {
+    return value ? String(value).slice(0, 5) : '-';
+}
+
+let allAppointments = [];
+
+async function loadAppointments() {
+    const table = document.getElementById('appointmentTable');
+    table.innerHTML = '<div class="loading">Loading grooming appointments...</div>';
+
+    try {
+        const response = await fetch('http://localhost:3000/api/admin/grooming-appointments');
+
+        if (!response.ok) throw new Error('Server error: ' + response.status);
+
+        const data = await response.json();
+        if (!data.success) throw new Error(data.message || 'Unable to load appointments');
+
+        allAppointments = data.appointments || [];
+
+        document.getElementById('totalAppointments').textContent = allAppointments.length;
+        document.getElementById('pendingAppointments').textContent =
+            allAppointments.filter(a => a.status === 'Pending').length;
+        document.getElementById('confirmedAppointments').textContent =
+            allAppointments.filter(a => a.status === 'Confirmed').length;
+
+        renderAppointments(allAppointments);
+    } catch (error) {
+        console.error('Grooming loading error:', error);
+        table.innerHTML = '<div class="error">Unable to load appointments. Check that the backend is running.</div>';
+    }
+}
+
+function renderAppointments(appointments) {
+    const table = document.getElementById('appointmentTable');
+
+    if (!appointments.length) {
+        table.innerHTML = '<div class="empty">No grooming appointments found.</div>';
+        return;
+    }
+
+    const rows = appointments.map(a => `
+        <tr>
+            <td><b>#${safe(a.appointment_id)}</b></td>
+            <td>
+                <span class="name">${safe(a.customer_name)}</span><br>
+                ${safe(a.phone)}
+            </td>
+            <td><span class="name">${safe(a.pet_name)}</span></td>
+            <td>${safe(a.service_name)}</td>
+            <td>${formatDate(a.appointment_date)}</td>
+            <td>${formatTime(a.appointment_time)}</td>
+            <td>
+                <select class="status-select" id="status-${a.appointment_id}">
+                    ${['Pending', 'Confirmed', 'Cancelled'].map(status =>
+                        `<option value="${status}" ${a.status === status ? 'selected' : ''}>${status}</option>`
+                    ).join('')}
+                </select>
+                <br>
+                <button class="save-btn" id="save-${a.appointment_id}"
+                    onclick="updateStatus(${Number(a.appointment_id)})">Save</button>
+                <div class="message" id="message-${a.appointment_id}"></div>
+            </td>
+        </tr>
+    `).join('');
+
+    table.innerHTML = `
+        <table>
+            <thead>
+                <tr>
+                    <th>Appointment ID</th>
+                    <th>Customer Details</th>
+                    <th>Pet</th>
+                    <th>Service</th>
+                    <th>Date</th>
+                    <th>Time</th>
+                    <th>Update Status</th>
+                </tr>
+            </thead>
+            <tbody>${rows}</tbody>
+        </table>
+    `;
+}
+
+async function updateStatus(appointmentId) {
+    const status = document.getElementById(`status-${appointmentId}`).value;
+    const button = document.getElementById(`save-${appointmentId}`);
+    const message = document.getElementById(`message-${appointmentId}`);
+
+    button.disabled = true;
+    button.textContent = 'Saving...';
+    message.textContent = '';
+
+    try {
+        const response = await fetch(
+            `http://localhost:3000/api/admin/grooming/${appointmentId}/status`,
+            {
+                method: 'PUT',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ status })
+            }
+        );
+
+        const data = await response.json();
+
+        if (!response.ok || !data.success) {
+            throw new Error(data.message || 'Unable to update status');
+        }
+
+        message.style.color = 'green';
+        message.textContent = 'Updated!';
+        await loadAppointments();
+
+    } catch (error) {
+        message.style.color = '#c0394b';
+        message.textContent = error.message;
+    } finally {
+        button.disabled = false;
+        button.textContent = 'Save';
+    }
+}
+
+function filterAppointments() {
+    const search = document.getElementById('searchInput').value.toLowerCase();
+
+    const filtered = allAppointments.filter(a =>
+        [
+            a.customer_name, a.phone, a.pet_name,
+            a.service_name, a.status
+        ].some(value => String(value || '').toLowerCase().includes(search))
+    );
+
+    renderAppointments(filtered);
+}
+
+loadAppointments();
+</script>
+</body>
+</html>

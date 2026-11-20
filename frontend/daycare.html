@@ -1,0 +1,927 @@
+```html
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pet Daycare | PawPal</title>
+
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background: #f5f7f2;
+            color: #34483a;
+        }
+
+        /* Sidebar */
+        .sidebar {
+            width: 245px;
+            height: 100vh;
+            position: fixed;
+            top: 0;
+            left: 0;
+            background: #315e48;
+            color: white;
+            padding: 28px 18px;
+            display: flex;
+            flex-direction: column;
+            z-index: 100;
+        }
+
+        .logo {
+            font-size: 27px;
+            font-weight: bold;
+            text-decoration: none;
+            color: white;
+            margin-bottom: 38px;
+            padding-left: 10px;
+        }
+
+        .sidebar-nav {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .sidebar-nav a {
+            color: #e6eee7;
+            text-decoration: none;
+            padding: 14px 15px;
+            border-radius: 9px;
+            font-size: 15px;
+            transition: 0.2s;
+        }
+
+        .sidebar-nav a:hover,
+        .sidebar-nav a.active {
+            background: #527b60;
+            color: white;
+        }
+
+        .sidebar-bottom {
+            margin-top: auto;
+        }
+
+        .sidebar-bottom button {
+            width: 100%;
+            border: none;
+            background: #527b60;
+            color: white;
+            padding: 13px;
+            border-radius: 9px;
+            cursor: pointer;
+            font-size: 15px;
+        }
+
+        .sidebar-bottom button:hover {
+            background: #64866a;
+        }
+
+        /* Main Content */
+        .main-content {
+            margin-left: 245px;
+            padding: 30px 38px;
+        }
+
+        .topbar {
+            margin-bottom: 28px;
+        }
+
+        .topbar h2 {
+            margin: 0;
+            color: #315e48;
+            font-size: 23px;
+        }
+
+        /* Hero */
+        .daycare-hero {
+            background: linear-gradient(120deg, #315e48, #64866a);
+            color: white;
+            text-align: center;
+            padding: 55px 25px;
+            border-radius: 16px;
+            margin-bottom: 35px;
+        }
+
+        .daycare-hero span {
+            font-size: 12px;
+            font-weight: bold;
+            letter-spacing: 2px;
+        }
+
+        .daycare-hero h1 {
+            font-size: clamp(27px, 4vw, 38px);
+            margin: 18px 0;
+        }
+
+        .daycare-hero p {
+            color: #edf3ed;
+            line-height: 1.7;
+        }
+
+        .daycare-btn {
+            display: inline-block;
+            background: white;
+            color: #315e48;
+            padding: 13px 23px;
+            border-radius: 9px;
+            text-decoration: none;
+            font-weight: bold;
+            margin-top: 12px;
+        }
+
+        .daycare-btn:hover {
+            background: #edf3eb;
+        }
+
+        /* Sections */
+        .daycare-section {
+            margin: 40px 0;
+        }
+
+        .section-heading {
+            color: #315e48;
+            font-size: 23px;
+            margin-bottom: 10px;
+        }
+
+        .section-description {
+            color: #788379;
+            margin-bottom: 25px;
+        }
+
+        /* Packages */
+        .daycare-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 20px;
+        }
+
+        .daycare-card {
+            background: white;
+            padding: 25px;
+            border-radius: 13px;
+            border: 1px solid #e5ebe3;
+            box-shadow: 0 3px 12px rgba(40, 65, 45, 0.05);
+            transition: 0.2s;
+        }
+
+        .daycare-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 7px 18px rgba(40, 65, 45, 0.09);
+        }
+
+        .daycare-card.featured {
+            border: 2px solid #527b60;
+            background: #f8faf6;
+        }
+
+        .daycare-icon {
+            font-size: 35px;
+            margin-bottom: 12px;
+        }
+
+        .daycare-card h3 {
+            color: #315e48;
+            margin-bottom: 10px;
+        }
+
+        .daycare-card p {
+            color: #788379;
+            line-height: 1.7;
+            font-size: 14px;
+        }
+
+        .daycare-card h2 {
+            color: #315e48;
+            font-size: 28px;
+            margin: 17px 0 7px;
+        }
+
+        .daycare-card span {
+            color: #788379;
+            font-size: 13px;
+        }
+
+        /* Booking Form */
+        .daycare-booking {
+            max-width: 750px;
+            margin: 50px auto;
+            padding: 30px;
+            background: white;
+            border-radius: 14px;
+            border: 1px solid #e5ebe3;
+            box-shadow: 0 4px 15px rgba(40, 65, 45, 0.05);
+        }
+
+        .daycare-booking h2 {
+            text-align: center;
+            color: #315e48;
+            margin-top: 0;
+        }
+
+        .daycare-booking > p {
+            text-align: center;
+            color: #788379;
+        }
+
+        #daycareForm {
+            display: grid;
+            gap: 12px;
+            margin-top: 25px;
+        }
+
+        #daycareForm label {
+            font-weight: bold;
+            color: #45604c;
+            margin-top: 7px;
+        }
+
+        #daycareForm input,
+        #daycareForm select,
+        #daycareForm textarea {
+            width: 100%;
+            padding: 13px;
+            border: 1px solid #dce5dc;
+            border-radius: 9px;
+            background: #fcfdfb;
+            font: inherit;
+            outline: none;
+        }
+
+        #daycareForm input:focus,
+        #daycareForm select:focus,
+        #daycareForm textarea:focus {
+            border-color: #527b60;
+        }
+
+        #daycareForm textarea {
+            resize: vertical;
+        }
+
+        #daycareForm button {
+            background: #315e48;
+            color: white;
+            border: none;
+            padding: 15px;
+            border-radius: 9px;
+            font-size: 15px;
+            font-weight: bold;
+            cursor: pointer;
+            margin-top: 12px;
+        }
+
+        #daycareForm button:hover {
+            background: #527b60;
+        }
+
+        #daycareForm button:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+        }
+
+        #bookingDuration {
+            color: #527b60;
+            font-weight: bold;
+        }
+
+        #daycareMessage {
+            text-align: center;
+            font-weight: bold;
+            margin-top: 18px;
+        }
+
+        /* Booking History */
+        #bookingList {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 18px;
+            margin-top: 25px;
+            color: #788379;
+        }
+
+        #bookingList .daycare-card {
+            border-top: 4px solid #527b60;
+        }
+
+        #bookingList .daycare-card p {
+            font-size: 14px;
+            margin: 10px 0;
+        }
+
+        #bookingList .daycare-card h3 {
+            color: #315e48;
+            font-size: 22px;
+        }
+
+        .booking-status {
+            display: inline-block;
+            background: #eaf1e8;
+            color: #315e48;
+            padding: 6px 12px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: bold;
+        }
+
+        /* Benefits */
+        .daycare-benefits {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 15px;
+            margin-top: 22px;
+        }
+
+        .daycare-benefits div {
+            background: #eaf1e8;
+            color: #315e48;
+            padding: 22px 12px;
+            border-radius: 11px;
+            text-align: center;
+            font-weight: bold;
+        }
+
+        /* Responsive */
+        @media (max-width: 1000px) {
+            .daycare-grid {
+                grid-template-columns: 1fr 1fr;
+            }
+
+            .daycare-benefits {
+                grid-template-columns: 1fr 1fr;
+            }
+        }
+
+        @media (max-width: 850px) {
+            .sidebar {
+                width: 205px;
+            }
+
+            .main-content {
+                margin-left: 205px;
+                padding: 25px;
+            }
+        }
+
+        @media (max-width: 600px) {
+            .sidebar {
+                position: relative;
+                width: 100%;
+                height: auto;
+                padding: 17px;
+            }
+
+            .logo {
+                margin-bottom: 15px;
+            }
+
+            .sidebar-nav {
+                flex-direction: row;
+                flex-wrap: wrap;
+                gap: 5px;
+            }
+
+            .sidebar-nav a {
+                padding: 9px 11px;
+                font-size: 13px;
+            }
+
+            .sidebar-bottom {
+                margin-top: 12px;
+            }
+
+            .sidebar-bottom button {
+                padding: 9px;
+            }
+
+            .main-content {
+                margin-left: 0;
+                padding: 18px;
+            }
+
+            .daycare-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .daycare-benefits {
+                grid-template-columns: 1fr 1fr;
+            }
+
+            .daycare-booking {
+                padding: 22px 17px;
+            }
+
+            .daycare-hero {
+                padding: 38px 18px;
+            }
+        }
+
+        @media (max-width: 400px) {
+            .daycare-benefits {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- Sidebar -->
+    <aside class="sidebar">
+
+        <a href="dashboard.html" class="logo">🐾 PawPal</a>
+
+        <nav class="sidebar-nav">
+            <a href="dashboard.html">⌂ Dashboard</a>
+            <a href="pets.html">🐾 My Pets</a>
+            <a href="appointments.html">✂ Grooming</a>
+            <a href="daycare.html" class="active">🏡 Daycare</a>
+            <a href="supplies.html">🛍 Pet Supplies</a>
+            <a href="orders.html">📦 My Orders</a>
+        </nav>
+
+        <div class="sidebar-bottom">
+            <button onclick="logout()">↪ Logout</button>
+        </div>
+
+    </aside>
+
+
+    <!-- Main Content -->
+    <main class="main-content">
+
+        <div class="topbar">
+            <h2>Daycare Management</h2>
+        </div>
+
+        <!-- Hero -->
+        <section class="daycare-hero">
+
+            <span>PAWPAL PET DAYCARE</span>
+
+            <h1>A Happy Day for Your Pet!</h1>
+
+            <p>
+                Safe, caring and fun daycare services for your furry friends.
+            </p>
+
+            <a href="#daycare-services" class="daycare-btn">
+                Explore Services
+            </a>
+
+        </section>
+
+
+        <!-- Packages -->
+        <section id="daycare-services" class="daycare-section">
+
+            <h2 class="section-heading">Our Daycare Services</h2>
+
+            <p class="section-description">
+                Choose the perfect care package for your pet.
+            </p>
+
+            <div class="daycare-grid">
+
+                <div class="daycare-card">
+                    <div class="daycare-icon">☀️</div>
+                    <h3>Half Day Care</h3>
+                    <p>Perfect for pets who need a few hours of fun and attention.</p>
+                    <h2>₹299</h2>
+                    <span>Up to 4 Hours</span>
+                </div>
+
+                <div class="daycare-card featured">
+                    <div class="daycare-icon">🐶</div>
+                    <h3>Full Day Care</h3>
+                    <p>A full day of playtime, rest, attention and loving care.</p>
+                    <h2>₹499</h2>
+                    <span>Up to 8 Hours</span>
+                </div>
+
+                <div class="daycare-card">
+                    <div class="daycare-icon">⭐</div>
+                    <h3>Premium Care</h3>
+                    <p>Extra attention, personalised activities and extra comfort.</p>
+                    <h2>₹699</h2>
+                    <span>Up to 8 Hours</span>
+                </div>
+
+            </div>
+
+        </section>
+
+
+        <!-- Booking Form -->
+        <section class="daycare-booking" id="booking">
+
+            <h2>🐾 Book Daycare for Your Pet</h2>
+
+            <p>Choose your pet and preferred daycare schedule.</p>
+
+            <form id="daycareForm">
+
+                <label for="pet_id">Select Your Pet</label>
+                <select id="pet_id" required>
+                    <option value="">Loading your pets...</option>
+                </select>
+
+                <label for="package">Select Package</label>
+                <select id="package" required>
+                    <option value="">Choose a package</option>
+                    <option value="Half Day Care">Half Day Care - ₹299</option>
+                    <option value="Full Day Care">Full Day Care - ₹499</option>
+                    <option value="Premium Care">Premium Care - ₹699</option>
+                </select>
+
+                <label for="booking_date">Booking Start Date</label>
+                <input type="date" id="booking_date" required>
+
+                <label for="end_date">Booking End Date</label>
+                <input type="date" id="end_date" required>
+
+                <p id="bookingDuration"></p>
+
+                <label for="drop_time">Drop-off Time</label>
+                <input type="time" id="drop_time" required>
+
+                <label for="pickup_time">Pick-up Time</label>
+                <input type="time" id="pickup_time" required>
+
+                <label for="instructions">Special Instructions</label>
+                <textarea id="instructions" rows="4"
+                    placeholder="Any special care instructions?"></textarea>
+
+                <button type="submit" id="bookingButton">
+                    Book Daycare 🐶
+                </button>
+
+            </form>
+
+            <p id="daycareMessage"></p>
+
+        </section>
+
+
+        <!-- Booking History -->
+        <section class="daycare-section" id="myBookings">
+
+            <h2 class="section-heading">📋 My Daycare Bookings</h2>
+
+            <div id="bookingList">
+                Loading your bookings...
+            </div>
+
+        </section>
+
+
+        <!-- Benefits -->
+        <section class="daycare-section">
+
+            <h2 class="section-heading">Why Choose PawPal Daycare?</h2>
+
+            <div class="daycare-benefits">
+                <div>❤️ Loving Care</div>
+                <div>🐕 Fun Activities</div>
+                <div>🛡️ Safe Environment</div>
+                <div>🧸 Comfortable Rest</div>
+            </div>
+
+        </section>
+
+    </main>
+
+
+    <script>
+
+        const user = JSON.parse(
+            sessionStorage.getItem('pawpalUser') || 'null'
+        );
+
+        if (!user || !user.user_id) {
+            window.location.href = 'login.html';
+        }
+
+        const API = 'http://localhost:3000/api';
+
+        const petSelect = document.getElementById('pet_id');
+        const daycareForm = document.getElementById('daycareForm');
+        const daycareMessage = document.getElementById('daycareMessage');
+        const bookingList = document.getElementById('bookingList');
+        const bookingButton = document.getElementById('bookingButton');
+
+        const startDate = document.getElementById('booking_date');
+        const endDate = document.getElementById('end_date');
+        const durationMessage = document.getElementById('bookingDuration');
+
+        const today = new Date();
+        const todayString =
+            `${today.getFullYear()}-${String(today.getMonth() + 1).padStart(2, '0')}-${String(today.getDate()).padStart(2, '0')}`;
+
+        startDate.min = todayString;
+        endDate.min = todayString;
+
+        startDate.addEventListener('change', () => {
+
+            endDate.min = startDate.value;
+
+            if (endDate.value && endDate.value < startDate.value) {
+                endDate.value = '';
+            }
+
+            showDuration();
+
+        });
+
+        endDate.addEventListener('change', showDuration);
+
+
+        function showDuration() {
+
+            if (!startDate.value || !endDate.value) {
+                durationMessage.textContent = '';
+                return;
+            }
+
+            const start = new Date(startDate.value + 'T00:00:00');
+            const end = new Date(endDate.value + 'T00:00:00');
+
+            const days = Math.round(
+                (end - start) / 86400000
+            ) + 1;
+
+            durationMessage.textContent = days > 0
+                ? `🐾 Your booking duration: ${days} ${days === 1 ? 'day' : 'days'}`
+                : 'Please select a valid end date.';
+
+        }
+
+
+        async function loadPets() {
+
+            try {
+
+                const response = await fetch(
+                    `${API}/pets/${user.user_id}`
+                );
+
+                const data = await response.json();
+
+                petSelect.innerHTML =
+                    '<option value="">Select Your Pet</option>';
+
+                if (!data.success || !data.pets || !data.pets.length) {
+
+                    petSelect.innerHTML =
+                        '<option value="">Please add a pet first</option>';
+
+                    return;
+
+                }
+
+                data.pets.forEach(pet => {
+
+                    const option = document.createElement('option');
+
+                    option.value = pet.pet_id;
+
+                    option.textContent =
+                        `${pet.pet_name} (${pet.species})`;
+
+                    petSelect.appendChild(option);
+
+                });
+
+            } catch (error) {
+
+                petSelect.innerHTML =
+                    '<option value="">Unable to load pets</option>';
+
+            }
+
+        }
+
+
+        async function loadBookings() {
+
+            try {
+
+                const response = await fetch(
+                    `${API}/daycare/${user.user_id}`
+                );
+
+                const data = await response.json();
+
+                if (!data.success || !data.bookings || !data.bookings.length) {
+
+                    bookingList.textContent =
+                        'You have no daycare bookings yet.';
+
+                    return;
+
+                }
+
+                bookingList.innerHTML = '';
+
+                data.bookings.forEach(booking => {
+
+                    const card = document.createElement('div');
+
+                    card.className = 'daycare-card';
+
+                    const details = document.createElement('p');
+
+                    details.textContent =
+                        `Pet: ${booking.pet_name} | Package: ${booking.package_name}`;
+
+                    const date = document.createElement('p');
+
+                    const start = String(booking.booking_date).slice(0, 10);
+
+                    const end = booking.end_date
+                        ? String(booking.end_date).slice(0, 10)
+                        : start;
+
+                    date.textContent =
+                        start === end
+                            ? `Date: ${start}`
+                            : `Dates: ${start} to ${end}`;
+
+                    const time = document.createElement('p');
+
+                    time.textContent =
+                        `Drop-off: ${String(booking.drop_time).slice(0, 5)} | Pick-up: ${String(booking.pickup_time).slice(0, 5)}`;
+
+                    const price = document.createElement('h3');
+
+                    price.textContent = `₹${booking.price}`;
+
+                    const status = document.createElement('p');
+
+                    status.innerHTML = '';
+
+                    const statusBadge = document.createElement('span');
+
+                    statusBadge.className = 'booking-status';
+
+                    statusBadge.textContent =
+                        `Status: ${booking.booking_status}`;
+
+                    status.appendChild(statusBadge);
+
+                    card.append(details, date, time, price, status);
+
+                    bookingList.appendChild(card);
+
+                });
+
+            } catch (error) {
+
+                bookingList.textContent =
+                    'Unable to load your bookings.';
+
+            }
+
+        }
+
+
+        daycareForm.addEventListener('submit', async event => {
+
+            event.preventDefault();
+
+            const drop =
+                document.getElementById('drop_time').value;
+
+            const pickup =
+                document.getElementById('pickup_time').value;
+
+            if (pickup <= drop) {
+
+                daycareMessage.textContent =
+                    'Pick-up time must be after drop-off time.';
+
+                daycareMessage.style.color = 'red';
+
+                return;
+
+            }
+
+            if (!startDate.value || !endDate.value ||
+                endDate.value < startDate.value) {
+
+                daycareMessage.textContent =
+                    'Please select a valid booking date range.';
+
+                daycareMessage.style.color = 'red';
+
+                return;
+
+            }
+
+            const booking = {
+
+                user_id: user.user_id,
+
+                pet_id: petSelect.value,
+
+                package_name:
+                    document.getElementById('package').value,
+
+                booking_date: startDate.value,
+
+                end_date: endDate.value,
+
+                drop_time: drop,
+
+                pickup_time: pickup,
+
+                instructions:
+                    document.getElementById('instructions').value
+
+            };
+
+            bookingButton.disabled = true;
+
+            bookingButton.textContent = 'Booking...';
+
+            daycareMessage.textContent = '';
+
+            try {
+
+                const response = await fetch(`${API}/daycare`, {
+
+                    method: 'POST',
+
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+
+                    body: JSON.stringify(booking)
+
+                });
+
+                const data = await response.json();
+
+                if (!response.ok || !data.success) {
+
+                    throw new Error(
+                        data.message || 'Booking failed.'
+                    );
+
+                }
+
+                daycareMessage.textContent =
+                    `${data.message} Total: ₹${data.price}`;
+
+                daycareMessage.style.color = 'green';
+
+                daycareForm.reset();
+
+                startDate.min = todayString;
+                endDate.min = todayString;
+
+                durationMessage.textContent = '';
+
+                await loadBookings();
+
+            } catch (error) {
+
+                daycareMessage.textContent = error.message;
+
+                daycareMessage.style.color = 'red';
+
+            } finally {
+
+                bookingButton.disabled = false;
+
+                bookingButton.textContent =
+                    'Book Daycare 🐶';
+
+            }
+
+        });
+
+
+        function logout() {
+
+            sessionStorage.removeItem('pawpalUser');
+
+            window.location.href = 'login.html';
+
+        }
+
+
+        loadPets();
+        loadBookings();
+
+    </script>
+
+</body>
+</html>
+```

@@ -1,0 +1,454 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Pets Management | PawPal</title>
+
+<style>
+* {
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+    font-family: Arial, sans-serif;
+    background: #f7f5ff;
+    color: #302d50;
+}
+
+.sidebar {
+    width: 240px;
+    height: 100vh;
+    position: fixed;
+    left: 0;
+    top: 0;
+    background: #51418f;
+    color: white;
+    padding: 25px 15px;
+}
+
+.logo {
+    text-align: center;
+    font-size: 25px;
+    font-weight: bold;
+    margin-bottom: 35px;
+}
+
+.nav-link {
+    display: block;
+    color: white;
+    text-decoration: none;
+    padding: 14px;
+    border-radius: 9px;
+    margin-bottom: 8px;
+}
+
+.nav-link:hover,
+.nav-link.active {
+    background: #7867bb;
+}
+
+.main {
+    margin-left: 240px;
+    padding: 30px;
+}
+
+header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 15px;
+    flex-wrap: wrap;
+    margin-bottom: 25px;
+}
+
+header h1 {
+    margin: 0;
+    color: #51418f;
+}
+
+.back-btn {
+    background: #51418f;
+    color: white;
+    padding: 11px 18px;
+    border-radius: 8px;
+    text-decoration: none;
+}
+
+.stats {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 18px;
+    margin-bottom: 25px;
+}
+
+.stat-card {
+    background: white;
+    padding: 22px;
+    border-radius: 14px;
+    box-shadow: 0 3px 12px #0000000b;
+}
+
+.stat-card h3 {
+    color: #77718f;
+    font-size: 14px;
+    margin: 0 0 12px;
+}
+
+.stat-card p {
+    color: #51418f;
+    font-size: 27px;
+    font-weight: bold;
+    margin: 0;
+}
+
+.panel {
+    background: white;
+    padding: 22px;
+    border-radius: 14px;
+    box-shadow: 0 3px 12px #0000000b;
+}
+
+.panel-top {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 15px;
+    flex-wrap: wrap;
+    margin-bottom: 20px;
+}
+
+.panel-top h2 {
+    margin: 0;
+    color: #51418f;
+}
+
+.search {
+    padding: 11px 14px;
+    border: 1px solid #ddd7f1;
+    border-radius: 8px;
+    width: 260px;
+    max-width: 100%;
+    outline: none;
+}
+
+.search:focus {
+    border-color: #7867bb;
+}
+
+.table-wrap {
+    width: 100%;
+    overflow-x: auto;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    min-width: 1050px;
+}
+
+th, td {
+    padding: 13px 12px;
+    text-align: left;
+    border-bottom: 1px solid #eeeaf7;
+    font-size: 14px;
+    vertical-align: middle;
+}
+
+th {
+    background: #f1edff;
+    color: #51418f;
+    white-space: nowrap;
+}
+
+tr:hover td {
+    background: #faf9ff;
+}
+
+/* Pet profile photos */
+.pet-photo {
+    width: 60px;
+    height: 60px;
+    object-fit: cover;
+    border-radius: 50%;
+    display: block;
+    border: 2px solid #e4def7;
+}
+
+.photo-placeholder {
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    background: #f1edff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 25px;
+}
+
+.pet-name {
+    font-weight: bold;
+    color: #51418f;
+}
+
+.empty {
+    text-align: center;
+    padding: 30px;
+    color: #888;
+}
+
+.message {
+    margin: 15px 0;
+    color: #51418f;
+}
+
+@media (max-width: 850px) {
+    .sidebar {
+        width: 190px;
+    }
+
+    .main {
+        margin-left: 190px;
+        padding: 20px;
+    }
+
+    .stats {
+        grid-template-columns: 1fr;
+    }
+}
+
+@media (max-width: 600px) {
+    .sidebar {
+        position: static;
+        width: 100%;
+        height: auto;
+    }
+
+    .logo {
+        margin-bottom: 15px;
+    }
+
+    .main {
+        margin-left: 0;
+        padding: 15px;
+    }
+}
+</style>
+</head>
+
+<body>
+
+<aside class="sidebar">
+    <div class="logo">🐾 PawPal</div>
+
+    <a href="admin-dashboard.html" class="nav-link">📊 Dashboard</a>
+    <a href="customers.html" class="nav-link">👥 Customers</a>
+    <a href="admin-daycare.html" class="nav-link">🏡 Daycare</a>
+    <a href="admin-grooming.html" class="nav-link">✂️ Grooming</a>
+    <a href="admin-orders.html" class="nav-link">🛍️ Orders</a>
+    <a href="admin-pets.html" class="nav-link active">🐶 Pets</a>
+</aside>
+
+<main class="main">
+
+    <header>
+        <h1>🐶 Pets Management</h1>
+        <a href="admin-dashboard.html" class="back-btn">← Dashboard</a>
+    </header>
+
+    <section class="stats">
+        <div class="stat-card">
+            <h3>Total Registered Pets</h3>
+            <p id="totalPets">0</p>
+        </div>
+
+        <div class="stat-card">
+            <h3>Dogs</h3>
+            <p id="totalDogs">0</p>
+        </div>
+
+        <div class="stat-card">
+            <h3>Cats</h3>
+            <p id="totalCats">0</p>
+        </div>
+    </section>
+
+    <section class="panel">
+        <div class="panel-top">
+            <h2>All Registered Pets</h2>
+
+            <input
+                type="text"
+                id="searchInput"
+                class="search"
+                placeholder="Search pet or owner..."
+            >
+        </div>
+
+        <p class="message" id="message">Loading pets...</p>
+
+        <div class="table-wrap">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Pet Photo</th>
+                        <th>Pet ID</th>
+                        <th>Pet Name</th>
+                        <th>Species</th>
+                        <th>Breed</th>
+                        <th>Age</th>
+                        <th>Gender</th>
+                        <th>Owner Name</th>
+                        <th>Owner Email</th>
+                        <th>Owner Phone</th>
+                    </tr>
+                </thead>
+
+                <tbody id="petsTable">
+                    <tr>
+                        <td colspan="10" class="empty">Loading pets...</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </section>
+
+</main>
+
+<script>
+if (!sessionStorage.getItem('pawpalAdmin')) {
+    window.location.href = 'admin-login.html';
+}
+
+let allPets = [];
+
+function escapeHTML(value) {
+    return String(value ?? '').replace(/[&<>"']/g, char => ({
+        '&': '&amp;',
+        '<': '&lt;',
+        '>': '&gt;',
+        '"': '&quot;',
+        "'": '&#39;'
+    })[char]);
+}
+
+async function loadPets() {
+    const message = document.getElementById('message');
+    const table = document.getElementById('petsTable');
+
+    try {
+        const response = await fetch('http://localhost:3000/api/admin/pets');
+        const data = await response.json();
+
+        if (!response.ok || !data.success) {
+            throw new Error(data.message || 'Unable to load pets.');
+        }
+
+        allPets = data.pets || [];
+
+        document.getElementById('totalPets').textContent = allPets.length;
+
+        document.getElementById('totalDogs').textContent =
+            allPets.filter(pet =>
+                String(pet.species || '').toLowerCase() === 'dog'
+            ).length;
+
+        document.getElementById('totalCats').textContent =
+            allPets.filter(pet =>
+                String(pet.species || '').toLowerCase() === 'cat'
+            ).length;
+
+        message.textContent = '';
+        renderPets(allPets);
+
+    } catch (error) {
+        console.error(error);
+
+        message.textContent =
+            'Unable to load pets. Please check the backend server and try again.';
+
+        table.innerHTML = `
+            <tr>
+                <td colspan="10" class="empty">
+                    Could not load pet records.
+                </td>
+            </tr>
+        `;
+    }
+}
+
+function renderPets(pets) {
+    const table = document.getElementById('petsTable');
+
+    if (pets.length === 0) {
+        table.innerHTML = `
+            <tr>
+                <td colspan="10" class="empty">No pets found.</td>
+            </tr>
+        `;
+        return;
+    }
+
+    table.innerHTML = pets.map(pet => {
+        const photoUrl = pet.photo
+            ? `http://localhost:3000${pet.photo.startsWith('/') ? '' : '/'}${escapeHTML(pet.photo)}`
+            : '';
+
+        return `
+            <tr>
+                <td>
+                    ${
+                        photoUrl
+                        ? `
+                            <img
+                                src="${photoUrl}"
+                                class="pet-photo"
+                                alt="${escapeHTML(pet.pet_name)}"
+                                onerror="this.style.display='none'; this.nextElementSibling.style.display='flex'"
+                            >
+                            <span class="photo-placeholder" style="display:none">🐾</span>
+                        `
+                        : `<span class="photo-placeholder">🐾</span>`
+                    }
+                </td>
+
+                <td>${escapeHTML(pet.pet_id)}</td>
+                <td class="pet-name">${escapeHTML(pet.pet_name)}</td>
+                <td>${escapeHTML(pet.species)}</td>
+                <td>${escapeHTML(pet.breed || '-')}</td>
+                <td>${escapeHTML(pet.age ?? '-')}</td>
+                <td>${escapeHTML(pet.gender || '-')}</td>
+                <td>${escapeHTML(pet.owner_name || '-')}</td>
+                <td>${escapeHTML(pet.owner_email || '-')}</td>
+                <td>${escapeHTML(pet.owner_phone || '-')}</td>
+            </tr>
+        `;
+    }).join('');
+}
+
+document.getElementById('searchInput').addEventListener('input', function () {
+    const search = this.value.toLowerCase();
+
+    const filtered = allPets.filter(pet => {
+        const searchable = [
+            pet.pet_name,
+            pet.species,
+            pet.breed,
+            pet.owner_name,
+            pet.owner_email,
+            pet.owner_phone
+        ].join(' ').toLowerCase();
+
+        return searchable.includes(search);
+    });
+
+    renderPets(filtered);
+});
+
+loadPets();
+</script>
+
+</body>
+</html>

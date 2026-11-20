@@ -1,0 +1,532 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pet Supplies | PawPal</title>
+
+    <style>
+        * { box-sizing: border-box; }
+
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background: #f5f7f2;
+            color: #34483a;
+        }
+
+        /* Sidebar */
+        .sidebar {
+            width: 245px;
+            height: 100vh;
+            position: fixed;
+            top: 0;
+            left: 0;
+            background: #315e48;
+            color: white;
+            padding: 28px 18px;
+            display: flex;
+            flex-direction: column;
+            z-index: 100;
+        }
+
+        .logo {
+            font-size: 27px;
+            font-weight: bold;
+            text-decoration: none;
+            color: white;
+            margin-bottom: 38px;
+            padding-left: 10px;
+        }
+
+        .sidebar-nav {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .sidebar-nav a {
+            color: #e6eee7;
+            text-decoration: none;
+            padding: 14px 15px;
+            border-radius: 9px;
+            font-size: 15px;
+        }
+
+        .sidebar-nav a:hover,
+        .sidebar-nav a.active {
+            background: #527b60;
+            color: white;
+        }
+
+        .sidebar-bottom { margin-top: auto; }
+
+        .sidebar-bottom button {
+            width: 100%;
+            border: none;
+            background: #527b60;
+            color: white;
+            padding: 13px;
+            border-radius: 9px;
+            cursor: pointer;
+            font-size: 15px;
+        }
+
+        /* Main Content */
+        .main-content {
+            margin-left: 245px;
+            padding: 30px 38px;
+        }
+
+        .topbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 28px;
+            gap: 15px;
+        }
+
+        .topbar h2 {
+            margin: 0;
+            color: #315e48;
+            font-size: 23px;
+        }
+
+        .header-actions {
+            display: flex;
+            gap: 12px;
+        }
+
+        .header-icon-btn {
+            position: relative;
+            border: none;
+            background: white;
+            color: #315e48;
+            padding: 11px 16px;
+            border-radius: 9px;
+            text-decoration: none;
+            font-size: 19px;
+            cursor: pointer;
+        }
+
+        .cart-count {
+            position: absolute;
+            top: -7px;
+            right: -7px;
+            background: #527b60;
+            color: white;
+            border-radius: 50%;
+            min-width: 19px;
+            height: 19px;
+            font-size: 11px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        /* Hero */
+        .supplies-hero {
+            background: linear-gradient(120deg, #315e48, #64866a);
+            color: white;
+            padding: 42px;
+            border-radius: 16px;
+            margin-bottom: 32px;
+        }
+
+        .supplies-tag {
+            display: inline-block;
+            font-size: 12px;
+            letter-spacing: 1.5px;
+            background: rgba(255,255,255,0.15);
+            padding: 7px 12px;
+            border-radius: 20px;
+        }
+
+        .supplies-hero h1 {
+            margin: 18px 0 10px;
+            font-size: 30px;
+        }
+
+        .supplies-hero p {
+            line-height: 1.7;
+            max-width: 650px;
+            margin: 0;
+            color: #edf3ed;
+        }
+
+        /* Categories and Products */
+        .supplies-section { margin-bottom: 35px; }
+
+        .supplies-section h2 {
+            color: #315e48;
+            margin-bottom: 20px;
+            font-size: 22px;
+        }
+
+        .category-container {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 18px;
+        }
+
+        .category-card {
+            background: white;
+            padding: 23px 15px;
+            border-radius: 13px;
+            text-align: center;
+            border: 1px solid #e5ebe3;
+        }
+
+        .category-card div { font-size: 32px; margin-bottom: 10px; }
+
+        .category-card h3 {
+            color: #315e48;
+            margin: 8px 0;
+            font-size: 16px;
+        }
+
+        .category-card p {
+            color: #7a887c;
+            font-size: 13px;
+            margin: 0;
+        }
+
+        .supplies-toolbar {
+            display: flex;
+            gap: 14px;
+            margin-bottom: 22px;
+        }
+
+        .supplies-toolbar input,
+        .supplies-toolbar select {
+            padding: 13px 15px;
+            border: 1px solid #dce5dc;
+            border-radius: 9px;
+            background: white;
+            font-size: 14px;
+            outline: none;
+        }
+
+        .supplies-toolbar input { flex: 1; }
+
+        .product-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 20px;
+        }
+
+        /* Cart */
+        .cart-overlay {
+            position: fixed;
+            inset: 0;
+            background: rgba(0,0,0,0.55);
+            z-index: 9999;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+
+        .cart-panel {
+            background: white;
+            width: 100%;
+            max-width: 550px;
+            max-height: 85vh;
+            overflow-y: auto;
+            border-radius: 15px;
+            padding: 25px;
+            color: #34483a;
+        }
+
+        .cart-panel-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            border-bottom: 1px solid #e5ebe3;
+            padding-bottom: 15px;
+        }
+
+        .cart-panel-header h2 { color: #315e48; margin: 0 0 7px; }
+        .cart-panel-header p { margin: 0; color: #7a887c; }
+
+        .cart-close-btn {
+            border: none;
+            background: none;
+            font-size: 28px;
+            cursor: pointer;
+            color: #315e48;
+        }
+
+        .cart-panel-content { padding: 20px 0; }
+
+        .cart-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 12px;
+            padding: 15px 0;
+            border-bottom: 1px solid #e5ebe3;
+            flex-wrap: wrap;
+        }
+
+        .cart-product-info { display: flex; align-items: center; gap: 12px; }
+        .cart-product-emoji { font-size: 30px; }
+
+        .cart-product-info h3,
+        .cart-product-info p { margin: 4px 0; }
+
+        .cart-controls { display: flex; align-items: center; gap: 8px; }
+        .cart-controls button { cursor: pointer; padding: 6px 10px; }
+
+        .cart-panel-footer {
+            border-top: 1px solid #e5ebe3;
+            padding-top: 15px;
+        }
+
+        .cart-total-row {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 15px;
+            font-size: 18px;
+        }
+
+        .checkout-btn,
+        .add-cart-btn {
+            background: #315e48;
+            color: white;
+            border: none;
+            padding: 11px 16px;
+            border-radius: 8px;
+            cursor: pointer;
+        }
+
+        .checkout-btn { width: 100%; }
+        .empty-cart { text-align: center; padding: 25px 10px; }
+
+        /* Checkout */
+        .checkout-overlay {
+            position: fixed;
+            inset: 0;
+            background: rgba(0,0,0,0.6);
+            z-index: 10000;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+            overflow-y: auto;
+        }
+
+        .checkout-overlay {
+            background: white;
+            width: 100%;
+            max-width: 520px;
+            max-height: 90vh;
+            overflow-y: auto;
+            padding: 30px;
+            border-radius: 15px;
+            position: relative;
+            color: #34483a;
+        }
+
+        .checkout-close {
+            position: absolute;
+            top: 12px;
+            right: 18px;
+            border: none;
+            background: none;
+            font-size: 27px;
+            cursor: pointer;
+            color: #315e48;
+        }
+
+        .checkout-heading { text-align: center; margin-bottom: 25px; }
+        .checkout-heading span { font-size: 35px; }
+        .checkout-heading h2 { color: #315e48; }
+
+        .checkout-overlay h3 { color: #315e48; }
+
+        .checkout-overlay label {
+            display: block;
+            margin: 12px 0 6px;
+            font-weight: bold;
+        }
+
+        .checkout-overlay input:not([type="radio"]),
+        .checkout-overlay textarea {
+            width: 100%;
+            padding: 11px;
+            border: 1px solid #dce5dc;
+            border-radius: 8px;
+            font-size: 14px;
+        }
+
+        .checkout-overlay .payment-option {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-weight: normal;
+        }
+
+        .payment-heading { margin-top: 25px; }
+
+        .checkout-total {
+            display: flex;
+            justify-content: space-between;
+            margin: 22px 0;
+            font-size: 18px;
+        }
+
+        .place-order-btn {
+            width: 100%;
+            padding: 14px;
+            background: #315e48;
+            color: white;
+            border: none;
+            border-radius: 9px;
+            font-size: 16px;
+            cursor: pointer;
+        }
+
+        .place-order-btn:disabled { opacity: 0.6; cursor: not-allowed; }
+
+        /* Responsive */
+        @media (max-width: 1000px) {
+            .category-container { grid-template-columns: repeat(2, 1fr); }
+        }
+
+        @media (max-width: 850px) {
+            .sidebar { width: 205px; }
+            .main-content { margin-left: 205px; padding: 25px; }
+        }
+
+        @media (max-width: 600px) {
+            .sidebar {
+                position: relative;
+                width: 100%;
+                height: auto;
+                padding: 17px;
+            }
+
+            .logo { margin-bottom: 15px; padding-left: 5px; }
+
+            .sidebar-nav {
+                flex-direction: row;
+                flex-wrap: wrap;
+                gap: 5px;
+            }
+
+            .sidebar-nav a { padding: 9px 11px; font-size: 13px; }
+            .sidebar-bottom { margin-top: 12px; }
+            .sidebar-bottom button { padding: 9px; }
+            .main-content { margin-left: 0; padding: 18px; }
+            .topbar { align-items: flex-start; flex-wrap: wrap; }
+            .supplies-hero { padding: 25px; }
+            .supplies-hero h1 { font-size: 24px; }
+            .supplies-toolbar { flex-direction: column; }
+            .category-container { grid-template-columns: repeat(2, 1fr); gap: 10px; }
+        }
+    </style>
+</head>
+
+<body>
+    <aside class="sidebar">
+        <a href="dashboard.html" class="logo">🐾 PawPal</a>
+
+        <nav class="sidebar-nav">
+            <a href="dashboard.html">⌂ Dashboard</a>
+            <a href="pets.html">🐾 My Pets</a>
+            <a href="appointments.html">✂ Grooming</a>
+            <a href="daycare.html">🏡 Daycare</a>
+            <a href="supplies.html" class="active">🛍 Pet Supplies</a>
+            <a href="orders.html">📦 My Orders</a>
+        </nav>
+
+        <div class="sidebar-bottom">
+            <button onclick="logout()">↪ Logout</button>
+        </div>
+    </aside>
+
+    <main class="main-content">
+        <div class="topbar">
+            <h2>Pet Supplies</h2>
+
+            <div class="header-actions">
+                <button class="header-icon-btn" onclick="openCart()" title="Shopping Cart">
+                    🛒 <span id="cartCount" class="cart-count">0</span>
+                </button>
+
+                <a href="orders.html" class="header-icon-btn" title="My Orders">📦</a>
+            </div>
+        </div>
+
+        <section class="supplies-hero">
+            <span class="supplies-tag">PAWPAL PET STORE</span>
+            <h1>Everything Your Pet Needs! 🐾</h1>
+            <p>Discover food, toys, accessories and care products to keep your furry friends happy and healthy.</p>
+        </section>
+
+        <section class="supplies-section">
+            <h2>Shop by Category</h2>
+
+            <div class="category-container">
+                <div class="category-card">
+                    <div>🥣</div>
+                    <h3>Pet Food</h3>
+                    <p>Food, treats and nutrition</p>
+                </div>
+                <div class="category-card">
+                    <div>🧸</div>
+                    <h3>Toys</h3>
+                    <p>Fun toys for playful pets</p>
+                </div>
+                <div class="category-card">
+                    <div>🦴</div>
+                    <h3>Accessories</h3>
+                    <p>Collars, leashes and more</p>
+                </div>
+                <div class="category-card">
+                    <div>🧴</div>
+                    <h3>Pet Care</h3>
+                    <p>Shampoos and grooming items</p>
+                </div>
+            </div>
+        </section>
+
+        <section class="supplies-section">
+            <h2>Our Pet Products</h2>
+
+            <div class="supplies-toolbar">
+                <input type="text" id="productSearch" placeholder="Search pet products...">
+
+                <select id="categoryFilter">
+                    <option value="all">All Categories</option>
+                    <option value="food">Pet Food</option>
+                    <option value="toys">Toys</option>
+                    <option value="accessories">Accessories</option>
+                    <option value="care">Pet Care</option>
+                </select>
+            </div>
+
+            <div id="productContainer" class="product-container">
+                <p>Loading products...</p>
+            </div>
+        </section>
+    </main>
+
+    <script>
+        const user = JSON.parse(sessionStorage.getItem("pawpalUser"));
+
+        if (!user) {
+            window.location.href = "login.html";
+        }
+
+        function logout() {
+            sessionStorage.removeItem("pawpalUser");
+            window.location.href = "login.html";
+        }
+    </script>
+
+    <script src="../js/supplies.js"></script>
+</body>
+</html>

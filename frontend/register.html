@@ -1,0 +1,229 @@
+```html
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Register | PawPal</title>
+
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background: #f5f7f2;
+            color: #34483a;
+            min-height: 100vh;
+        }
+
+        .auth-section {
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 25px;
+        }
+
+        .auth-card {
+            width: 100%;
+            max-width: 480px;
+            background: white;
+            padding: 38px;
+            border-radius: 16px;
+            border: 1px solid #e5ebe3;
+            box-shadow: 0 8px 25px rgba(49, 94, 72, 0.08);
+        }
+
+        .auth-card h1 {
+            color: #315e48;
+            text-align: center;
+            margin: 0 0 12px;
+            font-size: 29px;
+        }
+
+        .auth-card > p {
+            text-align: center;
+            color: #788379;
+            font-size: 14px;
+            line-height: 1.6;
+            margin-bottom: 25px;
+        }
+
+        #registerForm {
+            display: flex;
+            flex-direction: column;
+            gap: 14px;
+        }
+
+        #registerForm input,
+        #registerForm textarea {
+            width: 100%;
+            padding: 14px;
+            border: 1px solid #dce5dc;
+            border-radius: 9px;
+            font-size: 14px;
+            font-family: Arial, sans-serif;
+            outline: none;
+            background: #fcfdfb;
+        }
+
+        #registerForm input:focus,
+        #registerForm textarea:focus {
+            border-color: #527b60;
+        }
+
+        #registerForm textarea {
+            min-height: 85px;
+            resize: vertical;
+        }
+
+        #registerForm button {
+            padding: 14px;
+            border: none;
+            border-radius: 9px;
+            background: #315e48;
+            color: white;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: 0.2s;
+        }
+
+        #registerForm button:hover {
+            background: #527b60;
+        }
+
+        #message {
+            margin: 15px 0;
+            text-align: center;
+            font-size: 14px;
+        }
+
+        .auth-links {
+            text-align: center;
+            margin-top: 20px;
+            font-size: 14px;
+            color: #788379;
+        }
+
+        .auth-links a {
+            color: #315e48;
+            font-weight: bold;
+            text-decoration: none;
+        }
+
+        .auth-links a:hover {
+            text-decoration: underline;
+        }
+
+        .back-home {
+            display: block;
+            text-align: center;
+            margin-top: 20px;
+            color: #527b60;
+            text-decoration: none;
+            font-size: 14px;
+        }
+
+        .back-home:hover {
+            text-decoration: underline;
+        }
+
+        @media (max-width: 500px) {
+            .auth-card {
+                padding: 25px 20px;
+            }
+
+            .auth-card h1 {
+                font-size: 25px;
+            }
+        }
+    </style>
+
+</head>
+
+<body>
+
+    <section class="auth-section">
+
+        <div class="auth-card">
+
+            <h1>🐾 Join PawPal!</h1>
+
+            <p>
+                Create your account and give your pet the best care.
+            </p>
+
+
+            <form id="registerForm">
+
+                <input
+                    type="text"
+                    id="full_name"
+                    placeholder="Full Name"
+                    required
+                >
+
+                <input
+                    type="email"
+                    id="email"
+                    placeholder="Email Address"
+                    required
+                >
+
+                <input
+                    type="password"
+                    id="password"
+                    placeholder="Password (minimum 8 characters)"
+                    minlength="8"
+                    required
+                >
+
+                <input
+                    type="tel"
+                    id="phone"
+                    placeholder="Phone Number"
+                >
+
+                <textarea
+                    id="address"
+                    placeholder="Your Address"
+                ></textarea>
+
+                <button type="submit">
+                    Create Account
+                </button>
+
+            </form>
+
+
+            <p id="message"></p>
+
+
+            <div class="auth-links">
+
+                Already have an account?
+                <a href="login.html">Login here</a>
+
+            </div>
+
+
+            <a href="index.html" class="back-home">
+                ← Back to Home
+            </a>
+
+        </div>
+
+    </section>
+
+
+    <script src="../js/register.js"></script>
+
+</body>
+</html>
+```

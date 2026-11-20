@@ -1,0 +1,462 @@
+```html
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Grooming Appointments | PawPal</title>
+
+    <link rel="stylesheet" href="../css/style.css">
+
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background: #f5f7f2;
+            color: #34463a;
+        }
+
+        /* Sidebar */
+        .customer-sidebar {
+            width: 245px;
+            height: 100vh;
+            position: fixed;
+            top: 0;
+            left: 0;
+            background: #315e48;
+            padding: 25px 16px;
+            display: flex;
+            flex-direction: column;
+            z-index: 100;
+        }
+
+        .sidebar-logo {
+            color: white;
+            font-size: 26px;
+            font-weight: bold;
+            text-align: center;
+            text-decoration: none;
+            margin-bottom: 40px;
+        }
+
+        .sidebar-label {
+            color: #c5d8c9;
+            font-size: 11px;
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+            padding: 0 12px;
+            margin-bottom: 12px;
+        }
+
+        .sidebar-link {
+            display: block;
+            color: #edf4ed;
+            text-decoration: none;
+            padding: 14px 13px;
+            border-radius: 9px;
+            margin-bottom: 8px;
+            font-size: 15px;
+            transition: 0.2s;
+        }
+
+        .sidebar-link:hover,
+        .sidebar-link.active {
+            background: #527b60;
+            color: white;
+        }
+
+        .sidebar-bottom {
+            margin-top: auto;
+        }
+
+        .logout-btn {
+            width: 100%;
+            padding: 13px;
+            border: 1px solid #91ad98;
+            border-radius: 9px;
+            background: transparent;
+            color: white;
+            font-size: 15px;
+            cursor: pointer;
+        }
+
+        .logout-btn:hover {
+            background: #527b60;
+        }
+
+        /* Main Content */
+        .customer-main {
+            margin-left: 245px;
+            padding: 35px;
+            min-height: 100vh;
+        }
+
+        .page-header {
+            background: linear-gradient(120deg, #315e48, #64866a);
+            color: white;
+            padding: 30px;
+            border-radius: 15px;
+            margin-bottom: 30px;
+        }
+
+        .page-header h1 {
+            margin: 0 0 10px;
+            font-size: 28px;
+        }
+
+        .page-header p {
+            margin: 0;
+            color: #e3eee3;
+            font-size: 15px;
+            line-height: 1.6;
+        }
+
+        .section-heading {
+            margin-bottom: 18px;
+        }
+
+        .section-heading h2 {
+            color: #315e48;
+            font-size: 21px;
+            margin: 0 0 8px;
+        }
+
+        .section-heading p {
+            color: #788379;
+            font-size: 14px;
+            margin: 0;
+        }
+
+        .grooming-section {
+            margin-bottom: 35px;
+        }
+
+        /* Booking Card */
+        .grooming-booking-card {
+            background: white;
+            padding: 28px;
+            border-radius: 14px;
+            border: 1px solid #e8ece5;
+            box-shadow: 0 3px 12px rgba(40, 65, 45, 0.05);
+            max-width: 850px;
+        }
+
+        #appointmentForm {
+            display: flex;
+            flex-direction: column;
+            gap: 19px;
+        }
+
+        .grooming-form-group {
+            display: flex;
+            flex-direction: column;
+            gap: 9px;
+            flex: 1;
+        }
+
+        .grooming-form-group label {
+            color: #415b49;
+            font-size: 14px;
+            font-weight: 600;
+        }
+
+        .grooming-form-group input,
+        .grooming-form-group select {
+            width: 100%;
+            padding: 13px;
+            border: 1px solid #dce5da;
+            border-radius: 8px;
+            background: #fff;
+            color: #34463a;
+            font-size: 14px;
+            outline: none;
+        }
+
+        .grooming-form-group input:focus,
+        .grooming-form-group select:focus {
+            border-color: #64866a;
+        }
+
+        .grooming-date-time {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 18px;
+        }
+
+        .grooming-book-btn {
+            padding: 14px 20px;
+            background: #315e48;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 15px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: 0.2s;
+            align-self: flex-start;
+        }
+
+        .grooming-book-btn:hover {
+            background: #527b60;
+        }
+
+        #appointmentMessage {
+            margin: 15px 0 0;
+            color: #315e48;
+            font-size: 14px;
+        }
+
+        /* Appointment History */
+        .grooming-appointment-list {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+            gap: 18px;
+        }
+
+        .grooming-appointment-list:empty {
+            display: block;
+        }
+
+        /* Preserve existing generated appointment cards */
+        .grooming-appointment-list > * {
+            background: white;
+            border: 1px solid #e8ece5;
+            border-radius: 12px;
+            padding: 20px;
+            box-shadow: 0 3px 12px rgba(40, 65, 45, 0.05);
+        }
+
+        /* Responsive */
+        @media (max-width: 850px) {
+            .customer-sidebar {
+                width: 205px;
+            }
+
+            .customer-main {
+                margin-left: 205px;
+                padding: 25px;
+            }
+        }
+
+        @media (max-width: 600px) {
+            .customer-sidebar {
+                position: relative;
+                width: 100%;
+                height: auto;
+                padding: 17px;
+            }
+
+            .sidebar-logo {
+                margin-bottom: 20px;
+            }
+
+            .sidebar-label {
+                display: none;
+            }
+
+            .sidebar-link {
+                display: inline-block;
+                padding: 10px;
+                margin: 3px;
+                font-size: 13px;
+            }
+
+            .sidebar-bottom {
+                margin-top: 12px;
+            }
+
+            .customer-main {
+                margin-left: 0;
+                padding: 18px;
+            }
+
+            .page-header {
+                padding: 24px 20px;
+            }
+
+            .page-header h1 {
+                font-size: 23px;
+            }
+
+            .grooming-date-time {
+                grid-template-columns: 1fr;
+            }
+
+            .grooming-booking-card {
+                padding: 20px;
+            }
+
+            .grooming-book-btn {
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- Left Sidebar -->
+    <aside class="customer-sidebar">
+
+        <a href="dashboard.html" class="sidebar-logo">
+            🐾 PawPal
+        </a>
+
+        <p class="sidebar-label">Main Menu</p>
+
+        <a href="dashboard.html" class="sidebar-link">
+            📊 Dashboard
+        </a>
+
+        <a href="pets.html" class="sidebar-link">
+            🐶 My Pets
+        </a>
+
+        <a href="appointments.html" class="sidebar-link active">
+            ✂️ Grooming
+        </a>
+
+        <a href="daycare.html" class="sidebar-link">
+            🏡 Daycare
+        </a>
+
+        <a href="supplies.html" class="sidebar-link">
+            🛍️ Pet Supplies
+        </a>
+
+        <div class="sidebar-bottom">
+            <button class="logout-btn" onclick="logout()">
+                ↪ Logout
+            </button>
+        </div>
+
+    </aside>
+
+    <!-- Main Content -->
+    <main class="customer-main">
+
+        <section class="page-header">
+            <h1>✂️ Grooming & Spa</h1>
+            <p>
+                Give your furry friend the care they deserve.
+                Book professional grooming services for your pet.
+            </p>
+        </section>
+
+        <!-- Booking Section -->
+        <section class="grooming-section">
+
+            <div class="section-heading">
+                <h2>Book Your Appointment</h2>
+                <p>
+                    Choose a service and schedule a grooming session
+                    for your pet.
+                </p>
+            </div>
+
+            <div class="grooming-booking-card">
+
+                <form id="appointmentForm">
+
+                    <div class="grooming-form-group">
+                        <label for="pet_id">🐾 Select Your Pet</label>
+
+                        <select id="pet_id" name="pet_id" required>
+                            <option value="">Loading pets...</option>
+                        </select>
+                    </div>
+
+                    <div class="grooming-form-group">
+                        <label for="service_name">✂️ Choose Grooming Service</label>
+
+                        <select id="service_name" name="service_name" required>
+                            <option value="">Select a service</option>
+                            <option value="Bath and Brush">Bath and Brush</option>
+                            <option value="Haircut and Styling">Haircut and Styling</option>
+                            <option value="Nail Trimming">Nail Trimming</option>
+                            <option value="Full Grooming">Full Grooming</option>
+                        </select>
+                    </div>
+
+                    <div class="grooming-date-time">
+
+                        <div class="grooming-form-group">
+                            <label for="appointment_date">📅 Appointment Date</label>
+
+                            <input
+                                type="date"
+                                id="appointment_date"
+                                name="appointment_date"
+                                required
+                            >
+                        </div>
+
+                        <div class="grooming-form-group">
+                            <label for="appointment_time">⏰ Appointment Time</label>
+
+                            <input
+                                type="time"
+                                id="appointment_time"
+                                name="appointment_time"
+                                required
+                            >
+                        </div>
+
+                    </div>
+
+                    <button type="submit" class="grooming-book-btn">
+                        Book Appointment →
+                    </button>
+
+                </form>
+
+                <p id="appointmentMessage"></p>
+
+            </div>
+
+        </section>
+
+        <!-- Appointment History -->
+        <section class="grooming-section">
+
+            <div class="section-heading">
+                <h2>My Grooming Appointments</h2>
+                <p>
+                    Keep track of your pet's upcoming grooming sessions
+                    and previous bookings.
+                </p>
+            </div>
+
+            <div id="appointmentList" class="grooming-appointment-list">
+                Loading appointments...
+            </div>
+
+        </section>
+
+    </main>
+
+    <script>
+        const user = JSON.parse(
+            sessionStorage.getItem('pawpalUser')
+        );
+
+        if (!user) {
+            window.location.href = 'login.html';
+        }
+
+        function logout() {
+            sessionStorage.removeItem('pawpalUser');
+            window.location.href = 'login.html';
+        }
+    </script>
+
+    <script src="../js/appointments.js"></script>
+
+</body>
+</html>
+```

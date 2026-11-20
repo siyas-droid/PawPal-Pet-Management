@@ -1,0 +1,172 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Welcome to PawPal</title>
+
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: Arial, sans-serif;
+        }
+
+        body {
+            min-height: 100vh;
+            background: #f5f7f2;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        .main-container {
+            width: 100%;
+            max-width: 850px;
+            text-align: center;
+        }
+
+        .logo {
+            font-size: 55px;
+            margin-bottom: 10px;
+        }
+
+        h1 {
+            color: #315e48;
+            font-size: 38px;
+            margin-bottom: 12px;
+        }
+
+        .subtitle {
+            color: #666;
+            margin-bottom: 40px;
+            font-size: 16px;
+        }
+
+        .login-container {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 25px;
+        }
+
+        .login-card {
+            background: white;
+            padding: 35px 25px;
+            border-radius: 18px;
+            border: 1px solid #e0e8df;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.06);
+        }
+
+        .login-icon {
+            font-size: 48px;
+            margin-bottom: 18px;
+        }
+
+        .login-card h2 {
+            color: #315e48;
+            margin-bottom: 12px;
+        }
+
+        .login-card p {
+            color: #777;
+            font-size: 14px;
+            line-height: 1.6;
+            margin-bottom: 25px;
+        }
+
+        .login-btn {
+            display: block;
+            background: #315e48;
+            color: white;
+            padding: 13px;
+            border-radius: 8px;
+            text-decoration: none;
+            font-weight: bold;
+            transition: 0.3s;
+        }
+
+        .login-btn:hover {
+            background: #527b60;
+        }
+
+        .admin-btn {
+            background: #527b60;
+        }
+
+        .admin-btn:hover {
+            background: #315e48;
+        }
+
+        footer {
+            margin-top: 40px;
+            color: #888;
+            font-size: 13px;
+        }
+
+        @media (max-width: 600px) {
+            .login-container {
+                grid-template-columns: 1fr;
+            }
+
+            h1 {
+                font-size: 30px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="main-container">
+
+        <div class="logo">🐾</div>
+
+        <h1>Welcome to PawPal!</h1>
+
+        <p class="subtitle">
+            Your pet's care, our priority.
+            Choose how you want to continue.
+        </p>
+
+        <div class="login-container">
+
+            <div class="login-card">
+                <div class="login-icon">🐶</div>
+                <h2>Customer Login</h2>
+                <p>
+                    Manage your pets, book grooming and daycare
+                    services, and shop for pet supplies.
+                </p>
+
+                <a href="login.html" class="login-btn">
+                    Login as Customer →
+                </a>
+            </div>
+
+            <div class="login-card">
+                <div class="login-icon">🛠️</div>
+                <h2>Admin Login</h2>
+                <p>
+                    Access the administration panel to manage
+                    customers, services, orders and pets.
+                </p>
+
+                <a href="admin-login.html"
+                   class="login-btn admin-btn">
+                    Login as Admin →
+                </a>
+            </div>
+
+        </div>
+
+        <footer>
+            © 2026 PawPal | Pet Care Management System
+        </footer>
+
+    </div>
+
+</body>
+</html>

@@ -1,0 +1,472 @@
+```html
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>My Pets | PawPal</title>
+
+    <link rel="stylesheet" href="../css/style.css">
+
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background: #f5f7f2;
+            color: #34463a;
+        }
+
+        /* Sidebar */
+        .customer-sidebar {
+            width: 245px;
+            height: 100vh;
+            position: fixed;
+            top: 0;
+            left: 0;
+            background: #315e48;
+            padding: 25px 16px;
+            display: flex;
+            flex-direction: column;
+            z-index: 100;
+        }
+
+        .sidebar-logo {
+            color: white;
+            font-size: 26px;
+            font-weight: bold;
+            text-align: center;
+            text-decoration: none;
+            margin-bottom: 40px;
+        }
+
+        .sidebar-label {
+            color: #c5d8c9;
+            font-size: 11px;
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+            padding: 0 12px;
+            margin-bottom: 12px;
+        }
+
+        .sidebar-link {
+            display: block;
+            color: #edf4ed;
+            text-decoration: none;
+            padding: 14px 13px;
+            border-radius: 9px;
+            margin-bottom: 8px;
+            font-size: 15px;
+            transition: 0.2s;
+        }
+
+        .sidebar-link:hover,
+        .sidebar-link.active {
+            background: #527b60;
+            color: white;
+        }
+
+        .sidebar-bottom {
+            margin-top: auto;
+        }
+
+        .logout-btn {
+            width: 100%;
+            padding: 13px;
+            border: 1px solid #91ad98;
+            border-radius: 9px;
+            background: transparent;
+            color: white;
+            font-size: 15px;
+            cursor: pointer;
+        }
+
+        .logout-btn:hover {
+            background: #527b60;
+        }
+
+        /* Main Content */
+        .customer-main {
+            margin-left: 245px;
+            padding: 35px;
+            min-height: 100vh;
+        }
+
+        .page-header {
+            background: linear-gradient(120deg, #315e48, #64866a);
+            color: white;
+            padding: 30px;
+            border-radius: 15px;
+            margin-bottom: 28px;
+        }
+
+        .page-header h1 {
+            margin: 0 0 10px;
+            font-size: 28px;
+        }
+
+        .page-header p {
+            margin: 0;
+            color: #e3eee3;
+            font-size: 15px;
+        }
+
+        .section-heading {
+            color: #315e48;
+            font-size: 21px;
+            margin: 30px 0 18px;
+        }
+
+        /* Form Cards */
+        .auth-card.pet-form-card {
+            background: white;
+            max-width: 750px;
+            margin: 0 auto 25px;
+            padding: 28px;
+            border-radius: 14px;
+            border: 1px solid #e8ece5;
+            box-shadow: 0 3px 12px rgba(40, 65, 45, 0.05);
+        }
+
+        .pet-form-card h2 {
+            color: #315e48;
+            margin: 0 0 22px;
+            font-size: 21px;
+        }
+
+        #petForm,
+        #editPetForm {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+        }
+
+        #petForm input,
+        #petForm select,
+        #editPetForm input,
+        #editPetForm select {
+            width: 100%;
+            padding: 13px;
+            border: 1px solid #dce5da;
+            border-radius: 8px;
+            font-size: 14px;
+            background: #fff;
+            color: #34463a;
+            outline: none;
+        }
+
+        #petForm input:focus,
+        #petForm select:focus,
+        #editPetForm input:focus,
+        #editPetForm select:focus {
+            border-color: #64866a;
+        }
+
+        #petForm label,
+        #editPetForm label {
+            align-self: center;
+            color: #536458;
+            font-size: 14px;
+        }
+
+        #petForm input[type="file"] {
+            font-size: 12px;
+        }
+
+        #petForm button,
+        #editPetForm button {
+            padding: 13px 18px;
+            border: none;
+            border-radius: 8px;
+            background: #315e48;
+            color: white;
+            font-size: 14px;
+            cursor: pointer;
+            transition: 0.2s;
+        }
+
+        #petForm button:hover,
+        #editPetForm button:hover {
+            background: #527b60;
+        }
+
+        #editPetForm button[type="button"] {
+            background: #e9eee7;
+            color: #315e48;
+        }
+
+        #editPetForm button[type="button"]:hover {
+            background: #dce5da;
+        }
+
+        #petMessage,
+        #editMessage {
+            color: #315e48;
+            margin: 15px 0 0;
+            font-size: 14px;
+        }
+
+        /* Pet Profiles */
+        .pet-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+            gap: 20px;
+        }
+
+        .pet-container > * {
+            border-radius: 13px;
+        }
+
+        .pet-list-heading {
+            color: #315e48;
+            font-size: 21px;
+            margin: 35px 0 20px;
+        }
+
+        [hidden] {
+            display: none !important;
+        }
+
+        /* Responsive */
+        @media (max-width: 850px) {
+            .customer-sidebar {
+                width: 205px;
+            }
+
+            .customer-main {
+                margin-left: 205px;
+                padding: 25px;
+            }
+        }
+
+        @media (max-width: 600px) {
+            .customer-sidebar {
+                position: relative;
+                width: 100%;
+                height: auto;
+                padding: 17px;
+            }
+
+            .sidebar-logo {
+                margin-bottom: 20px;
+            }
+
+            .sidebar-label {
+                display: none;
+            }
+
+            .sidebar-link {
+                display: inline-block;
+                padding: 10px;
+                margin: 3px;
+                font-size: 13px;
+            }
+
+            .sidebar-bottom {
+                margin-top: 12px;
+            }
+
+            .customer-main {
+                margin-left: 0;
+                padding: 18px;
+            }
+
+            .page-header {
+                padding: 24px 20px;
+            }
+
+            .page-header h1 {
+                font-size: 23px;
+            }
+
+            #petForm,
+            #editPetForm {
+                grid-template-columns: 1fr;
+            }
+
+            .auth-card.pet-form-card {
+                padding: 20px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- Left Sidebar -->
+    <aside class="customer-sidebar">
+
+        <a href="dashboard.html" class="sidebar-logo">
+            🐾 PawPal
+        </a>
+
+        <p class="sidebar-label">Main Menu</p>
+
+        <a href="dashboard.html" class="sidebar-link">
+            📊 Dashboard
+        </a>
+
+        <a href="pets.html" class="sidebar-link active">
+            🐶 My Pets
+        </a>
+
+        <a href="appointments.html" class="sidebar-link">
+            ✂️ Grooming
+        </a>
+
+        <a href="daycare.html" class="sidebar-link">
+            🏡 Daycare
+        </a>
+
+        <a href="supplies.html" class="sidebar-link">
+            🛍️ Pet Supplies
+        </a>
+
+        <div class="sidebar-bottom">
+            <button class="logout-btn" onclick="logout()">
+                ↪ Logout
+            </button>
+        </div>
+
+    </aside>
+
+    <!-- Main Content -->
+    <main class="customer-main">
+
+        <section class="page-header">
+            <h1>🐶 My Pets</h1>
+            <p>
+                Manage your pet profiles and keep all their
+                important details in one place.
+            </p>
+        </section>
+
+        <!-- Add New Pet -->
+        <div class="auth-card pet-form-card">
+
+            <h2>Add a New Pet</h2>
+
+            <form id="petForm">
+
+                <input type="text" id="pet_name"
+                    placeholder="Pet Name" required>
+
+                <select id="species" required>
+                    <option value="">Select Species</option>
+                    <option value="Dog">Dog</option>
+                    <option value="Cat">Cat</option>
+                    <option value="Bird">Bird</option>
+                    <option value="Rabbit">Rabbit</option>
+                    <option value="Other">Other</option>
+                </select>
+
+                <input type="text" id="breed"
+                    placeholder="Breed">
+
+                <input type="number" id="age"
+                    placeholder="Age in years" min="0">
+
+                <label for="photo">Pet Photo:</label>
+
+                <input
+                    type="file"
+                    id="photo"
+                    name="photo"
+                    accept="image/jpeg,image/png,image/webp"
+                >
+
+                <select id="gender">
+                    <option value="">Select Gender</option>
+                    <option value="Male">Male</option>
+                    <option value="Female">Female</option>
+                </select>
+
+                <button type="submit">Add My Pet 🐾</button>
+
+            </form>
+
+            <p id="petMessage"></p>
+
+        </div>
+
+        <!-- Edit Pet Panel -->
+        <div class="auth-card pet-form-card" id="editPetPanel" hidden>
+
+            <h2>✏️ Edit Pet Details</h2>
+
+            <form id="editPetForm">
+
+                <input type="hidden" id="edit_pet_id">
+
+                <label for="edit_pet_name">Pet Name</label>
+                <input type="text" id="edit_pet_name"
+                    placeholder="Pet Name" required>
+
+                <label for="edit_species">Species</label>
+                <select id="edit_species" required>
+                    <option value="">Select Species</option>
+                    <option value="Dog">Dog</option>
+                    <option value="Cat">Cat</option>
+                    <option value="Bird">Bird</option>
+                    <option value="Rabbit">Rabbit</option>
+                    <option value="Other">Other</option>
+                </select>
+
+                <label for="edit_breed">Breed</label>
+                <input type="text" id="edit_breed"
+                    placeholder="Breed">
+
+                <label for="edit_age">Age in years</label>
+                <input type="number" id="edit_age"
+                    placeholder="Age in years" min="0">
+
+                <label for="edit_gender">Gender</label>
+                <select id="edit_gender">
+                    <option value="">Select Gender</option>
+                    <option value="Male">Male</option>
+                    <option value="Female">Female</option>
+                </select>
+
+                <button type="submit">Save Changes 💾</button>
+
+                <button type="button" id="cancelEditButton">
+                    Cancel
+                </button>
+
+            </form>
+
+            <p id="editMessage"></p>
+
+        </div>
+
+        <!-- Pet Profiles -->
+        <h2 class="pet-list-heading">My Pet Profiles</h2>
+
+        <div id="petList" class="pet-container"></div>
+
+    </main>
+
+    <script>
+        const user = JSON.parse(
+            sessionStorage.getItem('pawpalUser')
+        );
+
+        if (!user) {
+            window.location.href = 'login.html';
+        }
+
+        function logout() {
+            sessionStorage.removeItem('pawpalUser');
+            window.location.href = 'login.html';
+        }
+    </script>
+
+    <script src="../js/pets.js"></script>
+
+</body>
+</html>
+```
