@@ -11,6 +11,8 @@ const app = express();
 
 app.use(cors());
 app.use(express.json());
+// Serve frontend files
+app.use(express.static(path.join(__dirname, '../frontend')));
 
 // Make uploaded pet photos accessible
 app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
@@ -45,7 +47,7 @@ const upload = multer({
 
 // Home route
 app.get('/', (req, res) => {
-    res.send('Welcome to PawPal Pet Management System! 🐾');
+    res.sendFile(path.join(__dirname, '../frontend/main.html'));
 });
 
 // Test database
@@ -1561,10 +1563,12 @@ app.get('/api/admin/pets', (req, res) => {
     });
 });
 
-// =====================================
-// START SERVER
-// =====================================
+ // =====================================
+ // START SERVER
+ // =====================================
 
-app.listen(process.env.PORT || 3000, () => {
-    console.log('🐾 PawPal server running on port 3000');
+const PORT = process.env.PORT || 3000;
+
+app.listen(PORT, () => {
+    console.log(`🐾 PawPal server running on port ${PORT}`);
 });

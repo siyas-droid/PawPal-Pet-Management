@@ -73,7 +73,7 @@ async function loadOrders() {
 
     try {
         const response = await fetch(
-            `http://localhost:3000/api/orders/${encodeURIComponent(user.user_id)}`
+            `/api/orders/${encodeURIComponent(user.user_id)}`
         );
 
         const data = await response.json();

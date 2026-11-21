@@ -8,7 +8,7 @@ const editMessage = document.getElementById('editMessage');
 const cancelEditButton = document.getElementById('cancelEditButton');
 
 const user = JSON.parse(sessionStorage.getItem('pawpalUser') || 'null');
-const API = 'http://localhost:3000/api';
+const API = '/api';
 
 if (!user || !user.user_id) {
     window.location.href = 'login.html';
@@ -42,7 +42,7 @@ async function loadPets() {
 
             const photo = document.createElement('img');
             photo.src = pet.photo
-                ? `http://localhost:3000${pet.photo}`
+                ? `${pet.photo}`
                 : 'https://placehold.co/160x160?text=No+Photo';
             Object.assign(photo.style, {
                 width: '160px',

@@ -38,7 +38,7 @@ function showMessage(message, type) {
 async function loadPets() {
     try {
         const response = await fetch(
-            `http://localhost:3000/api/pets/${user.user_id}`
+            `/api/pets/${user.user_id}`
         );
 
         const data = await response.json();
@@ -94,7 +94,7 @@ appointmentForm.addEventListener('submit', async (event) => {
 
     try {
         const response = await fetch(
-            'http://localhost:3000/api/appointments',
+            '/api/appointments',
             {
                 method: 'POST',
                 headers: {
@@ -164,7 +164,7 @@ async function loadAppointments() {
 
     try {
         const response = await fetch(
-            `http://localhost:3000/api/appointments/${user.user_id}`
+            `/api/appointments/${user.user_id}`
         );
 
         const appointments = await response.json();
@@ -268,7 +268,7 @@ ${new Date(appointment.appointment_date).toLocaleDateString('en-IN', {
 
                     try {
                         const response = await fetch(
-                            `http://localhost:3000/api/appointments/${appointmentId}/cancel`,
+                            `/api/appointments/${appointmentId}/cancel`,
                             {
                                 method: 'PUT',
                                 headers: {

@@ -339,7 +339,7 @@ async function loadPets() {
     const table = document.getElementById('petsTable');
 
     try {
-        const response = await fetch('http://localhost:3000/api/admin/pets');
+        const response = await fetch('/api/admin/pets');
         const data = await response.json();
 
         if (!response.ok || !data.success) {
@@ -393,7 +393,7 @@ function renderPets(pets) {
 
     table.innerHTML = pets.map(pet => {
         const photoUrl = pet.photo
-            ? `http://localhost:3000${pet.photo.startsWith('/') ? '' : '/'}${escapeHTML(pet.photo)}`
+            ? escapeHTML(pet.photo)
             : '';
 
         return `
