@@ -2,7 +2,7 @@ services:
   - type: web
     name: pawpal
     runtime: node
-    buildCommand: npm ci
+    buildCommand: npm ci && cp -R css js frontend/
     startCommand: npm start
     healthCheckPath: /
     envVars:
