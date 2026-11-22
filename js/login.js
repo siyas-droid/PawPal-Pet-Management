@@ -5,11 +5,27 @@ loginForm.addEventListener('submit', async function (event) {
     event.preventDefault();
 
     const message = document.getElementById('message');
+    const button = loginForm.querySelector('button');
 
     const loginData = {
-        email: document.getElementById('email').value,
+        email: document.getElementById('email').value.trim(),
         password: document.getElementById('password').value
     };
+
+    button.disabled = true;
+    button.textContent = 'Logging in...';
+    message.textContent = '';
+
+    const isStaticSite = window.location.protocol === 'file:' ||
+        window.location.hostname.endsWith('github.io');
+
+    if (isStaticSite) {
+        message.textContent = 'Login needs the PawPal backend. Open the Render app URL, or run the app with npm start and visit http://localhost:3000/login.html.';
+        message.style.color = 'red';
+        button.disabled = false;
+        button.textContent = 'Login';
+        return;
+    }
 
     try {
         const response = await fetch('/api/login', {
@@ -22,27 +38,32 @@ loginForm.addEventListener('submit', async function (event) {
 
         const data = await response.json();
 
-        if (data.success) {
-            message.textContent = data.message;
-            message.style.color = 'green';
-
-            // Save basic user details for the dashboard
-            sessionStorage.setItem(
-                'pawpalUser',
-                JSON.stringify(data.user)
-            );
-
-            setTimeout(() => {
-                window.location.href = 'dashboard.html';
-            }, 1000);
-
-        } else {
-            message.textContent = data.message;
-            message.style.color = 'red';
+        if (!response.ok || !data.success) {
+            throw new Error(data.message || 'Login failed.');
         }
 
+        // Save customer session for the dashboard
+        sessionStorage.setItem(
+            'pawpalUser',
+            JSON.stringify(data.user)
+        );
+
+        message.textContent = data.message || 'Login successful!';
+        message.style.color = 'green';
+
+        window.location.assign('dashboard.html');
+
     } catch (error) {
-        message.textContent = 'Unable to connect to PawPal server.';
+        console.error('Customer login error:', error);
+
+        message.textContent = error.message === 'Failed to fetch'
+            ? 'Unable to connect to PawPal. Start the backend with npm start, or use the live Render app URL.'
+            : error.message;
+
         message.style.color = 'red';
+
+    } finally {
+        button.disabled = false;
+        button.textContent = 'Login';
     }
 });
