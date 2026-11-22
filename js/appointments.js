@@ -4,6 +4,7 @@ const petSelect = document.getElementById('pet_id');
 const appointmentMessage = document.getElementById('appointmentMessage');
 const appointmentList = document.getElementById('appointmentList');
 const dateInput = document.getElementById('appointment_date');
+const API = '/api';
 
 // Logged-in user
 const user = JSON.parse(sessionStorage.getItem('pawpalUser'));
@@ -36,14 +37,14 @@ function showMessage(message, type) {
 
 // Load customer's pets
 async function loadPets() {
+    petSelect.innerHTML = '<option value="">Loading your pets…</option>';
+
     try {
-        const response = await fetch(
-            `/api/pets/${user.user_id}`
-        );
+        const response = await fetch(`${API}/pets/${user.user_id}`);
 
         const data = await response.json();
 
-        if (!response.ok) {
+        if (!response.ok || data.success === false) {
             throw new Error(data.message || 'Unable to load pets');
         }
 
@@ -53,8 +54,11 @@ async function loadPets() {
             throw new Error('Invalid pets response');
         }
 
-        petSelect.innerHTML =
-            '<option value="">Select your pet</option>';
+        petSelect.replaceChildren();
+        const firstOption = document.createElement('option');
+        firstOption.value = '';
+        firstOption.textContent = pets.length ? 'Select your pet' : 'Please add a pet first';
+        petSelect.appendChild(firstOption);
 
         pets.forEach(pet => {
             const option = document.createElement('option');
@@ -65,16 +69,13 @@ async function loadPets() {
             petSelect.appendChild(option);
         });
 
-        if (pets.length === 0) {
-            petSelect.innerHTML =
-                '<option value="">Please add a pet first</option>';
-        }
-
     } catch (error) {
         console.error('Error loading pets:', error);
 
-        petSelect.innerHTML =
-            '<option value="">Unable to load pets</option>';
+        petSelect.innerHTML = '<option value="">Could not load pets — try refreshing</option>';
+        if (window.location.hostname.endsWith('github.io')) {
+            petSelect.options[0].textContent = 'Open the live app to load pets';
+        }
     }
 }
 
@@ -94,7 +95,7 @@ appointmentForm.addEventListener('submit', async (event) => {
 
     try {
         const response = await fetch(
-            '/api/appointments',
+            `${API}/appointments`,
             {
                 method: 'POST',
                 headers: {
@@ -164,15 +165,23 @@ async function loadAppointments() {
 
     try {
         const response = await fetch(
-            `/api/appointments/${user.user_id}`
+            `${API}/appointments/${user.user_id}`
         );
 
-        const appointments = await response.json();
+        const data = await response.json();
 
         if (!response.ok) {
             throw new Error(
-                appointments.message || 'Unable to load appointments.'
+                data.message || 'Unable to load appointments.'
             );
+        }
+
+        const appointments = Array.isArray(data)
+            ? data
+            : data.appointments;
+
+        if (!Array.isArray(appointments)) {
+            throw new Error(data.message || 'Invalid appointments response.');
         }
 
         appointmentList.innerHTML = '';
@@ -312,8 +321,9 @@ ${new Date(appointment.appointment_date).toLocaleDateString('en-IN', {
     } catch (error) {
         console.error('Error loading appointments:', error);
 
-        appointmentList.innerHTML =
-            '<p>Unable to load appointments. Please refresh the page.</p>';
+        appointmentList.textContent = window.location.hostname.endsWith('github.io')
+            ? 'Open the live PawPal app to load grooming appointments.'
+            : 'Unable to load appointments. Please refresh the page.';
     }
 }
 
