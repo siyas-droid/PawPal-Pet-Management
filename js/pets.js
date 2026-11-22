@@ -20,12 +20,13 @@ function showMessage(element, message, success = false) {
 }
 
 async function loadPets() {
+    petList.textContent = 'Loading your pet profiles…';
     try {
         const response = await fetch(`${API}/pets/${user.user_id}`);
         const data = await response.json();
 
-        if (!data.success) {
-            petList.textContent = data.message;
+        if (!response.ok || !data.success) {
+            petList.textContent = data.message || 'Unable to load your pets.';
             return;
         }
 
@@ -37,30 +38,27 @@ async function loadPets() {
         }
 
         data.pets.forEach(pet => {
-            const card = document.createElement('div');
+            const card = document.createElement('article');
             card.className = 'pet-card';
 
             const photo = document.createElement('img');
+            photo.className = 'pet-card-photo';
             photo.src = pet.photo
                 ? `${pet.photo}`
-                : 'https://placehold.co/160x160?text=No+Photo';
-            Object.assign(photo.style, {
-                width: '160px',
-                height: '160px',
-                objectFit: 'cover',
-                borderRadius: '12px',
-                display: 'block',
-                marginBottom: '12px'
-            });
+                : 'data:image/svg+xml,%3Csvg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 480 320"%3E%3Crect width="480" height="320" fill="%23eaf1e8"/%3E%3Ctext x="240" y="190" text-anchor="middle" font-size="110"%3E%F0%9F%90%BE%3C/text%3E%3C/svg%3E';
+            photo.onerror = () => {
+                photo.onerror = null;
+                photo.src = 'data:image/svg+xml,%3Csvg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 480 320"%3E%3Crect width="480" height="320" fill="%23eaf1e8"/%3E%3Ctext x="240" y="190" text-anchor="middle" font-size="110"%3E%F0%9F%90%BE%3C/text%3E%3C/svg%3E';
+            };
             photo.alt = pet.pet_name;
 
-            const details = document.createElement('div');
-            details.innerHTML = '';
+            const content = document.createElement('div');
+            content.className = 'pet-card-content';
 
             const name = document.createElement('h3');
             name.textContent = '🐾 ' + pet.pet_name;
 
-            card.append(photo, name);
+            content.appendChild(name);
 
             [
                 `Species: ${pet.species}`,
@@ -70,7 +68,7 @@ async function loadPets() {
             ].forEach(value => {
                 const p = document.createElement('p');
                 p.textContent = value;
-                card.appendChild(p);
+                content.appendChild(p);
             });
 
             const photoInput = document.createElement('input');
@@ -93,7 +91,6 @@ async function loadPets() {
             const editButton = document.createElement('button');
             editButton.type = 'button';
             editButton.textContent = 'Edit Pet ✏️';
-            editButton.style.background = '#A66BBE';
             editButton.onclick = () => editPet(pet);
 
             const deleteButton = document.createElement('button');
@@ -101,7 +98,12 @@ async function loadPets() {
             deleteButton.textContent = 'Delete Pet';
             deleteButton.onclick = () => deletePet(pet.pet_id);
 
-            card.append(photoButton, photoInput, editButton, deleteButton);
+            const actions = document.createElement('div');
+            actions.className = 'pet-card-actions';
+            deleteButton.className = 'delete-pet-button';
+            actions.append(photoButton, photoInput, editButton, deleteButton);
+            content.appendChild(actions);
+            card.append(photo, content);
             petList.appendChild(card);
         });
 
@@ -114,11 +116,13 @@ async function uploadPetPhoto(petId, file) {
     const allowed = ['image/jpeg', 'image/png', 'image/webp'];
 
     if (!allowed.includes(file.type)) {
-        return showMessage(petMessage, 'Please select a JPG, PNG or WEBP image.');
+        showMessage(petMessage, 'Please select a JPG, PNG or WEBP image.');
+        return false;
     }
 
     if (file.size > 5 * 1024 * 1024) {
-        return showMessage(petMessage, 'Photo must be smaller than 5 MB.');
+        showMessage(petMessage, 'Photo must be smaller than 5 MB.');
+        return false;
     }
 
     const formData = new FormData();
@@ -135,8 +139,10 @@ async function uploadPetPhoto(petId, file) {
         showMessage(petMessage, data.message, response.ok && data.success);
 
         if (response.ok && data.success) await loadPets();
+        return response.ok && data.success;
     } catch {
         showMessage(petMessage, 'Unable to upload pet photo.');
+        return false;
     }
 }
 

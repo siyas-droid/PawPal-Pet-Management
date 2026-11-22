@@ -32,10 +32,16 @@ jobs:
         with:
           enablement: true
 
+      - name: Assemble site files
+        run: |
+          mkdir -p _site
+          cp -R frontend/. _site/
+          cp -R css js _site/
+
       - name: Upload frontend
         uses: actions/upload-pages-artifact@v3
         with:
-          path: frontend
+          path: _site
 
       - name: Deploy
         id: deployment

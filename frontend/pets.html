@@ -6,7 +6,7 @@
 
     <title>My Pets | PawPal</title>
 
-    <link rel="stylesheet" href="../css/style.css">
+    <link rel="stylesheet" href="./css/style.css">
 
     <style>
         * {
@@ -219,6 +219,34 @@
         .pet-container > * {
             border-radius: 13px;
         }
+
+        .pet-card {
+            overflow: hidden;
+            padding: 0 0 20px;
+            background: #fff;
+            border: 1px solid #e1e9df;
+            box-shadow: 0 8px 22px rgba(38, 75, 50, .09);
+        }
+
+        .pet-card-photo {
+            display: block;
+            width: 100%;
+            height: 230px;
+            object-fit: cover;
+            background: #eaf1e8;
+        }
+
+        .pet-card-content { padding: 18px 20px 0; }
+        .pet-card h3 { margin: 0 0 13px; color: #315e48; font-size: 21px; }
+        .pet-card p { margin: 8px 0; color: #59695d; font-size: 14px; }
+        .pet-card-actions { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 17px; }
+        .pet-card-actions button {
+            margin: 0; padding: 10px 13px; border: 0; border-radius: 8px;
+            background: #315e48; color: white; font-size: 13px; cursor: pointer;
+        }
+        .pet-card-actions button:hover { background: #527b60; }
+        .pet-card-actions .delete-pet-button { background: #f6e9e7; color: #914b44; }
+        .pet-card-actions .delete-pet-button:hover { background: #efd8d5; }
 
         .pet-list-heading {
             color: #315e48;
@@ -464,7 +492,7 @@
         }
     </script>
 
-    <script src="../js/pets.js"></script>
+    <script src="./js/pets.js"></script>
 
 </body>
 </html>
